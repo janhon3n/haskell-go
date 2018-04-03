@@ -34,4 +34,4 @@ placeIsValid board place = if fst place >= length board || snd place >= length (
 
 {- TODO Add a PlaceData to the board for position Place -}
 updateBoard :: Board -> Place -> PlaceData -> Board
-updateBoard b p pd = b
+updateBoard board place placeData = board
