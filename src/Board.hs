@@ -1,20 +1,27 @@
 module Board where
 
-data Side = Black | White deriving (Show)
+data Side = Black | White deriving (Show, Eq)
 
+{- Place = paikan koordinaatit laudalla -}
 type Place = (Int, Int)
-data PlaceData = Empty | Side deriving (Eq, Show)
+{- PlaceData = paikan sisältö (tyhjä, musta tai valkoinen -}
+data PlaceData = Empty | Piece Side deriving (Eq, Show)
 
 type BoardDimensions = (Int, Int)
 
 type Row = [PlaceData]
 type Board = [Row]
 
+getDimensions :: Board -> BoardDimensions
+getDimensions board = (length board, length (board !! 0))
+
+{- Empty board creation -}
 emptyBoard :: BoardDimensions -> Board
 emptyBoard dim = replicate (fst dim) (emptyRow (snd dim))
 
 emptyRow :: Int -> Row
 emptyRow size = replicate size Empty
+
 
 dataAtPlace :: Board -> Place -> PlaceData
 dataAtPlace board place = board !! (fst place) !! (snd place)

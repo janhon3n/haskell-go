@@ -3,5 +3,5 @@ import Go
 
 main :: IO ()
 main = do
-    let result = playGame
+    result <- playGame
     return ()
