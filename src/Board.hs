@@ -8,12 +8,14 @@ type Place = (Int, Int)
 leftOf :: Place -> Place
 leftOf place = (fst place, snd place - 1)
 rightOf :: Place -> Place
-leftOf place = (fst place, snd place + 1)
+rightOf place = (fst place, snd place + 1)
 upOf :: Place -> Place
-leftOf place = (fst place - 1, snd place)
+upOf place = (fst place - 1, snd place)
 downOf :: Place -> Place
-leftOf place = (fst place + 1, snd place)
+downOf place = (fst place + 1, snd place)
 
+getAdjacentPlaces :: Board -> Place -> [Place]
+getAdjacentPlaces board place = filter (placeIsValid board) [downOf place, upOf place, leftOf place, rightOf place]
 
 {- PlaceData = paikan sisältö (tyhjä, musta tai valkoinen -}
 data PlaceData = Empty | Stone Side deriving (Eq, Show)
@@ -42,7 +44,7 @@ dataAtPlace board place = board !! (fst place) !! (snd place)
 {- Returns true if place is inside the board -}
 placeIsValid :: Board -> Place -> Bool
 placeIsValid [] _ = False
-placeIsValid board place = if fst place >= length board || snd place >= length (board !! 0)
+placeIsValid board place = if fst place >= length board || fst place < 0 || snd place >= length (board !! 0) || snd place < 0
     then False
     else True
 
@@ -61,6 +63,5 @@ nextPlace board place = do
 {- TODO -}
 getScore :: Board -> Side -> Int
 getScore board side = do
-    let regions = detectEmptyRegions board [] (0,0)
     0
 

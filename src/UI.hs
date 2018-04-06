@@ -10,7 +10,7 @@ instance Drawable Side where
 
 instance Drawable PlaceData where
     draw Empty = "."
-    draw (Piece p) = draw p
+    draw (Stone p) = draw p
 
 
 drawBoard :: Board -> IO ()

@@ -1,29 +1,30 @@
 module Region where
 import Board
 
-type RegionType = PlaceData
+type RegionType = Maybe PlaceData
 data BorderType = Undefined | BorderType Side deriving (Eq, Show)
 
-data Region = Region RegionType [Place]
+type Region = [Place]
 
-findRegionsOfType :: Board -> RegionType -> [Region]
-findRegionsOfType board regionType = do
+placeIsInRegion :: Region -> Place -> Bool
+placeIsInRegion region place = elem place region
+ 
+createRegion :: Board -> Place -> Region
+createRegion board place = do
 
-findRegionsOfType' :: Board -> RegionType -> [Region] -> Place -> [Region]
-findRegionsOfType' board regionType createdRegions placeToCheck = do
-    if (placeIsValid board placeToCheck /= True) then createdRegions
-        else do
-            let newRegions = addPlaceToRegions createdRegions regionType placeToCheck
-            findRegionsOfType' board regionType newRegions (nextPlace placeToCheck)
 
-addPlaceToRegions :: Board -> RegionType -> [Region] -> Place -> [Region]
-addPlaceToRegions board regionType regions place = do
-    let data = dataAtPlace board place
-    if (data /= regionType)
-        then regions
-        else do
-            if (dataAtPlace board (leftOf place) == regionType)
-                then 
-                else if (dataAtPlace board (leftOf place) == regionType)
-                    then 
-                    else regions ++ (Region regionType [place])
+getRegionType :: Board -> Region -> RegionType
+getRegionType board [] = Nothing
+getRegionType board region = Just (dataAtPlace board (region !! 0))
+
+expandRegion :: Board -> Region -> Place -> Region
+expandRegion board [] place = do
+    let region = [place]
+    foldl (expandRegion board) region (getAdjacentPlaces board place)
+
+expandRegion board region place = do
+    if (Just (dataAtPlace board place) == (getRegionType board region) && placeIsInRegion region place /= True)
+        then do
+            let updatedRegion = region ++ [place]
+            foldl (expandRegion board) updatedRegion (getAdjacentPlaces board place)
+        else region
