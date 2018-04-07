@@ -6,13 +6,6 @@ data RegionType = Undefined | RegionType PlaceData deriving (Eq, Show)
 
 type Region = [Place]
 
-regionUnion :: Region -> Region -> Region
-regionUnion region1 [] = region1
-regionUnion region1 (place:region2) = do
-    if elem place region1
-        then regionUnion region1 region2
-        else regionUnion (place:region1) region2
-
 getRegions :: Board -> [Region]
 getRegions board = getRegions' board (0,0) []
 
@@ -50,11 +43,11 @@ expandRegion board region place = do
             foldl (expandRegion board) updatedRegion (getAdjacentPlaces board place)
         else region
 
-getBorderType :: Board -> Region -> RegionType
-getBorderType board region = getRegionType board $ getBorderRegion board region
-
 getBorderRegion :: Board -> Region -> Region
-getBorderRegion board [] = []
-getBorderRegion board (place:restOfRegion) = do
-    let borderPlaces = filter (\p -> placeIsValid board p && (dataAtPlace board p) /= (dataAtPlace board place)) (getAdjacentPlaces board place)
-    regionUnion borderPlaces (getBorderRegion board restOfRegion)
+getBorderRegion board region = getBorderRegion' board region region
+
+getBorderRegion' :: Board -> Region -> Region -> Region
+getBorderRegion' board region [] = []
+getBorderRegion' board region regionToCheck@(place:restOfRegion) = do
+    let borderPlaces = filter (\p -> placeIsValid board p && placeIsInRegion region p /= True) (getAdjacentPlaces board place)
+    union borderPlaces (getBorderRegion' board region restOfRegion)
