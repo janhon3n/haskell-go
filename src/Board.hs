@@ -58,10 +58,3 @@ nextPlace board place = do
     if (snd place >= snd (getDimensions board) - 1)
         then (fst place + 1, 0)
         else (fst place, snd place + 1)
-
-
-{- TODO -}
-getScore :: Board -> Side -> Int
-getScore board side = do
-    0
-
