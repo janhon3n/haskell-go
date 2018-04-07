@@ -6,13 +6,6 @@ data RegionType = Undefined | RegionType PlaceData deriving (Eq, Show)
 
 type Region = [Place]
 
-getScore :: Board -> Side -> Int
-getScore board side = do
-    let emptyRegions = filter (\r -> getRegionType board r == RegionType Empty) (getRegions board)
-    let scoreRegions = filter (\r -> getBorderType board r == RegionType (Stone side)) emptyRegions
-    sum $ map length scoreRegions
-
-
 regionUnion :: Region -> Region -> Region
 regionUnion region1 [] = region1
 regionUnion region1 (place:region2) = do
