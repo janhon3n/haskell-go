@@ -37,6 +37,12 @@ emptyRow size = replicate size Empty
 getDimensions :: Board -> BoardDimensions
 getDimensions board = (length board, length (board !! 0))
 
+rowCount :: Board -> Int
+rowCount board = fst (getDimensions board)
+
+columnCount :: Board -> Int
+columnCount board = snd (getDimensions board)
+
 dataAtPlace :: Board -> Place -> PlaceData
 dataAtPlace board place = board !! (fst place) !! (snd place)
 
