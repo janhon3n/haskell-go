@@ -7,15 +7,15 @@ data RegionType = Undefined | RegionType PlaceData deriving (Eq, Show)
 type Region = [Place]
 
 getUniformRegions :: Board -> [Region]
-getUniformRegions board = getRegions' board (0,0) []
+getUniformRegions board = getUniformRegions' board (0,0) []
 
 getUniformRegions' :: Board -> Place -> [Region] -> [Region]
 getUniformRegions' board place foundRegions = do
     if placeIsValid board place /= True
         then foundRegions
         else if length (filter (\r -> elem place r) foundRegions) == 0
-            then getRegions' board (nextPlace board place) ((getRegion board place) : foundRegions)
-            else getRegions' board (nextPlace board place) foundRegions
+            then getUniformRegions' board (nextPlace board place) ((getUniformRegion board place) : foundRegions)
+            else getUniformRegions' board (nextPlace board place) foundRegions
 
 placeIsInRegion :: Region -> Place -> Bool
 placeIsInRegion region place = elem place region
@@ -28,8 +28,8 @@ getRegionType board region = do
         then Undefined
         else RegionType (dataTypes !! 0)
 
-getRegion :: Board -> Place -> Region
-getRegion board place = expandRegion board [] place
+getUniformRegion :: Board -> Place -> Region
+getUniformRegion board place = expandRegion board [] place
 
 expandRegion :: Board -> Region -> Place -> Region
 expandRegion board [] place = do
