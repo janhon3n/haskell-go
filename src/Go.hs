@@ -22,7 +22,8 @@ removeCaptured :: Board -> Place -> Side -> (Board, Int)
 removeCaptured board place side = do
     let capturedRegions = filter (\r -> getBorderType board r == (RegionType (Stone side))) $ map (getUniformRegion board) $ filter (\p -> dataAtPlace board p == (Stone (opposite side))) (getAdjacentPlaces board place)
     let points = sum (map length capturedRegions)
-    foldl (\b r -> fillRegion b r Empty) board capturedRegions
+    let board' = foldl (\b r -> fillRegion b r Empty) board capturedRegions
+    (board', points)
 
 
 testBoard = [[Empty, Empty, Stone White, Empty], [Stone Black, Empty, Stone White, Empty], [Empty, Stone Black, Stone White, Stone White], [Stone Black, Stone Black, Empty, Stone White]]
