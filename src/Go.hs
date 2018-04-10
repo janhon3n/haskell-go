@@ -6,7 +6,7 @@ import Player
 
 getScore :: Board -> Side -> Int
 getScore board side = do
-    0
+    1
 
 
 playGame :: IO Int
