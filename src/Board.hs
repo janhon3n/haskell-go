@@ -60,9 +60,18 @@ placeIsValid board place = if fst place >= length board || fst place < 0 || snd 
 
 
 {- TODO Add a PlaceData to the board for position Place -}
-addStoneToBoard :: Board -> Place -> PlaceData -> Board
-addStoneToBoard board place placeData = board
+addStoneToBoard :: Board -> Place -> Side -> Board
+addStoneToBoard board place side = do
+    if(not (placeIsValid board place) || (dataAtPlace board place /= Empty))
+        then board
+        else setDataAtPlace board place (Stone side)
 
+setDataAtPlace :: Board -> Place -> PlaceData -> Board
+setDataAtPlace board place placeData = do
+    if(placeIsValid board place)
+        then map (\(rowIndex, row) -> map (\(columnIndex, dataa) -> if (rowIndex, columnIndex) == place then placeData else dataa) (zip [0..] row)) (zip [0..] board)
+        else board
+    
 {- Turha ehkä -}
 nextPlace :: Board -> Place -> Place
 nextPlace board place = do
