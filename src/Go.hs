@@ -4,8 +4,6 @@ import Region
 import UI
 import Player
 
-testBoard = [[Empty, Empty, Stone White, Empty], [Stone Black, Empty, Stone White, Empty], [Empty, Stone Black, Stone White, Stone White], [Stone Black, Stone Black, Empty, Stone White]]
-
 getScore :: Board -> Side -> Int
 getScore board side = do
     1
