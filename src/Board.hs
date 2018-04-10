@@ -2,6 +2,10 @@ module Board where
 
 data Side = Black | White deriving (Show, Eq)
 
+opposite :: Side -> Side
+opposite Black = White
+opposite White = Black
+
 {- Place = paikan koordinaatit laudalla (rivi, sarake) -}
 type Place = (Int, Int)
 
@@ -19,7 +23,6 @@ getAdjacentPlaces board place = filter (placeIsValid board) [downOf place, upOf 
 
 {- PlaceData = paikan sisältö (tyhjä, musta tai valkoinen -}
 data PlaceData = Empty | Stone Side deriving (Eq, Show)
-
 type BoardDimensions = (Int, Int)
 
 {- esim [Empty, Empty, Stone Black, Stone White] -}
@@ -53,6 +56,8 @@ placeIsValid [] _ = False
 placeIsValid board place = if fst place >= length board || fst place < 0 || snd place >= length (board !! 0) || snd place < 0
     then False
     else True
+
+
 
 {- TODO Add a PlaceData to the board for position Place -}
 addStoneToBoard :: Board -> Place -> PlaceData -> Board
