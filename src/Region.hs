@@ -43,6 +43,9 @@ expandRegion board region place = do
             foldl (expandRegion board) updatedRegion (getAdjacentPlaces board place)
         else region
 
+getBorderType :: Board -> Region -> RegionType
+getBorderType board region = getRegionType board $ getBorderRegion board region
+
 getBorderRegion :: Board -> Region -> Region
 getBorderRegion board region = getBorderRegion' board region region
 
@@ -51,3 +54,6 @@ getBorderRegion' board region [] = []
 getBorderRegion' board region regionToCheck@(place:restOfRegion) = do
     let borderPlaces = filter (\p -> placeIsValid board p && placeIsInRegion region p /= True) (getAdjacentPlaces board place)
     union borderPlaces (getBorderRegion' board region restOfRegion)
+
+fillRegion :: Board -> Region -> PlaceData -> Board
+fillRegion board region dat = foldl (\b p -> setDataAtPlace b p dat) board region
