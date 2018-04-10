@@ -28,8 +28,8 @@ choosePlaceWithTree (SmartAi side) board = do
     (0,0)
 
 createBoardTree :: Board -> Int -> Side -> BoardTree
-createBoardTree board side 0 = BoardTree board []
-createBoardTree board side depth = BoardTree board (map (\p = createBoardTree (placeStone board side p) (depth-1) (oppositeSide side)) (getFreePlaces board))
+createBoardTree board 0 side = BoardTree board []
+-- createBoardTree board side depth = BoardTree board (map (\p -> createBoardTree (placeStone board side p) (depth-1) (oppositeSide side)) (getFreePlaces board))
 
 getFreePlaces :: Board -> [Place]
 getFreePlaces board = filter (placeIsFree board) [(rows,cols) | rows <- [0..(rowCount board - 1)], cols <- [0..(columnCount board -1)]]

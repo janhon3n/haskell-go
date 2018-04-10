@@ -6,9 +6,7 @@ import Player
 
 getScore :: Board -> Side -> Int
 getScore board side = do
-    let emptyRegions = filter (\r -> getRegionType board r == RegionType Empty) (getRegions board)
-    let scoreRegions = filter (\r -> getBorderType board r == RegionType (Stone side)) emptyRegions
-    sum $ map length scoreRegions
+    0
 
 
 playGame :: IO Int

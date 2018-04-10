@@ -19,7 +19,7 @@ getUniformRegions' board place foundRegions = do
 
 placeIsInRegion :: Region -> Place -> Bool
 placeIsInRegion region place = elem place region
- 
+
 getRegionType :: Board -> Region -> RegionType
 getRegionType board [] = Undefined
 getRegionType board region = do
