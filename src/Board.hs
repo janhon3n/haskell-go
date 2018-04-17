@@ -1,6 +1,9 @@
-module Board where
+{-# LANGUAGE DeriveGeneric #-}
 
-data Side = Black | White deriving (Show, Eq)
+module Board where
+import GHC.Generics
+
+data Side = Black | White deriving (Eq, Show, Generic)
 
 opposite :: Side -> Side
 opposite Black = White
@@ -22,7 +25,7 @@ getAdjacentPlaces :: Board -> Place -> [Place]
 getAdjacentPlaces board place = filter (placeIsValid board) [downOf place, upOf place, leftOf place, rightOf place]
 
 {- PlaceData = paikan sisältö (tyhjä, musta tai valkoinen -}
-data PlaceData = Empty | Stone Side deriving (Eq, Show)
+data PlaceData = Empty | Stone Side deriving (Eq, Show, Generic)
 type BoardDimensions = (Int, Int)
 
 {- esim [Empty, Empty, Stone Black, Stone White] -}

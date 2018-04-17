@@ -1,9 +1,12 @@
+{-# LANGUAGE DeriveGeneric #-}
+
 module Player where
 import Board
 import UI
+import GHC.Generics
 
-data PlayerType = Human | DumbAi | SmartAi deriving (Eq, Show)
-data Player = Player PlayerType Side Int deriving (Eq, Show)
+data PlayerType = Human | DumbAi | SmartAi deriving (Eq, Show, Generic)
+data Player = Player PlayerType Side Int deriving (Eq, Show, Generic)
 data BoardTree = BoardTree Board [BoardTree]
 
 getSide :: Player -> Side

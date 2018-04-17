@@ -1,20 +1,23 @@
+{-# LANGUAGE DeriveGeneric #-}
+
 module Go where
 import Board
 import Region
 import UI
 import Player
+import GHC.Generics
 
 data GameState = GameState { board :: Board
     , boardHistory :: [Board]
     , playerInTurn :: Player
     , otherPlayer :: Player
-    } deriving (Eq, Show)
+    } deriving (Eq, Show, Generic)
 
 sideInTurn :: GameState -> Side
 sideInTurn state = getSide (playerInTurn state)
 
-initiatalState :: BoardDimensions -> (PlayerType, PlayerType) -> GameState
-initiatalState boardDimensions ptypes = do
+initialState :: BoardDimensions -> (PlayerType, PlayerType) -> GameState
+initialState boardDimensions ptypes = do
     GameState { board = emptyBoard boardDimensions
         , boardHistory = []
         , playerInTurn = Player (fst ptypes) Black 0
