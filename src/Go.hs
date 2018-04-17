@@ -10,10 +10,9 @@ data GameState = GameState { board :: Board
     , otherPlayer :: Player
     } deriving (Eq, Show)
 
-<<<<<<< HEAD
 sideInTurn :: GameState -> Side
 sideInTurn state = getSide (playerInTurn state)
-=======
+
 initiatalState :: BoardDimensions -> GameState
 initiatalState boardDimensions = do
     GameState { board = emptyBoard boardDimensions
@@ -22,7 +21,6 @@ initiatalState boardDimensions = do
         , sideInTurn = Black
         , captured = Captured (Black, 0) (White, 0)
     }
->>>>>>> Startcreating initialState
 
 getScore :: Board -> Side -> Int
 getScore board side = do
@@ -33,22 +31,8 @@ playGame = do
     let gameBoard = emptyBoard (9,9)
     return 0
 
-<<<<<<< HEAD
 playLoop :: GameState -> (Int, Int)
 playLoop state = do
-=======
-getLine :: IO String
-putStrLn :: String -> IO () -- note that the result value is an empty tuple.
-randomRIO :: (Random a) => (a,a) -> IO a
-
-initiateDims :: IO ()
-initiateDims = do
-    putStrnLn "Choose board Dimensions"
-    a <- getLine
-
-playLoop :: Board -> Board -> (Int, Int) -> Side -> (Int, Int)
-playLoop board pastBoard scores sideInTurn = do
->>>>>>> Startcreating initialState
     (0,0)
 
 moveIsValid :: GameState -> Place -> Bool
@@ -78,14 +62,3 @@ removeCaptured board place side = do
     (board', points)
 
 testBoard = [[Empty, Empty, Stone White, Empty], [Stone Black, Empty, Stone White, Empty], [Empty, Stone Black, Stone White, Stone White], [Stone Black, Stone Black, Empty, Stone White]]
-<<<<<<< HEAD
-
-    
-=======
-testState = GameState { board = testBoard
-        , boardHistory = []
-        , sideInTurn = Black
-        , captured = Captured (Black, 1) (White, 0)
-        }
-    
->>>>>>> Startcreating initialState
