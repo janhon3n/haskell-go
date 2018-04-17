@@ -1,10 +1,6 @@
 module GoHttpServer where
-
-{- import Happstack.Server
-import Text.Blaze.Html5 (Html, (!), a, form, input, p, toHtml, label)
-import Text.Blaze.Html5.Attributes (action, enctype, href, name, size, type_, value)
-import Text.Blaze.Html5 as H
-import Text.Blaze.Html5.Attributes as A
+import Control.Monad
+import Happstack.Server
 
 conf :: Conf
 conf = Conf { port = 3008
@@ -13,9 +9,4 @@ conf = Conf { port = 3008
       }
 
 startServer :: IO ()
-startServer = simpleHTTP conf $ msum [ dir "menu" $ menu
-      , dir "play" $ play
-      ]
-
-menu :: ServerPart String
-menu = path $ \s -> ok $ "Hello, " ++ s -}
+startServer = simpleHTTP conf $ msum [ dir "static" $ serveDirectory EnableBrowsing ["client.js", "index.html"] "react-client/build" ]

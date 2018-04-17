@@ -1,3 +1,5 @@
 .stack-work/
 haskell-go.cabal
 *~
+
+react-client/node_modules/
