@@ -45,13 +45,13 @@ startServer = simpleHTTP nullConf $ handlers
 handlers :: ServerPart Response
 handlers = do
       decodeBody bodyPolicy
-      msum [ dir "client" $ serveDirectory EnableBrowsing [] "./react-client/build"
-            , dir "game" $ do
+      msum [ dir "game" $ do
                   method GET
                   ok $ toResponse $ encode (initialState (9,9) (Human, Human))
             , dir "game" $ do
                   method POST
-                  handleGameTurn]
+                  handleGameTurn
+            , serveDirectory EnableBrowsing [] "./react-client/build" ]
 
 handleGameTurn :: ServerPart Response
 handleGameTurn = do

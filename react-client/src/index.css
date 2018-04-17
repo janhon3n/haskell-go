@@ -2,4 +2,9 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  background-image: url("/background.png");
+  display:flex;
+  justify-content: center;
+  background-size: 400px 400px;
+  box-sizing: border-box;
 }
