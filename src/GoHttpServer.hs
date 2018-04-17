@@ -1,6 +1,6 @@
 module GoHttpServer where
 
-import Happstack.Server
+{- import Happstack.Server
 import Text.Blaze.Html5 (Html, (!), a, form, input, p, toHtml, label)
 import Text.Blaze.Html5.Attributes (action, enctype, href, name, size, type_, value)
 import Text.Blaze.Html5 as H
@@ -18,4 +18,4 @@ startServer = simpleHTTP conf $ msum [ dir "menu" $ menu
       ]
 
 menu :: ServerPart String
-menu = path $ \s -> ok $ "Hello, " ++ s
+menu = path $ \s -> ok $ "Hello, " ++ s -}

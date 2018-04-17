@@ -5,8 +5,8 @@ class Drawable a where
     draw :: a -> String
 
 instance Drawable Side where
-    draw Black = "X"
-    draw White = "O"
+    draw Black = "B"
+    draw White = "W"
 
 instance Drawable PlaceData where
     draw Empty = "."
