@@ -4,19 +4,14 @@ import Region
 import UI
 import Player
 
-data Captured = Captured (Side, Int) (Side, Int) deriving (Eq, Show)
-
-addCaptured :: Captured -> Side -> Int -> Captured
-addCaptured (Captured tuple1 tuple2) side amount = do
-    if side == fst tuple1
-        then (Captured (side, snd tuple1 + amount) tuple2) 
-        else (Captured tuple1 (side, snd tuple2 + amount)) 
-
 data GameState = GameState { board :: Board
     , boardHistory :: [Board]
-    , sideInTurn :: Side
-    , captured :: Captured
+    , playerInTurn :: Player
+    , otherPlayer :: Player
     } deriving (Eq, Show)
+
+sideInTurn :: GameState -> Side
+sideInTurn state = getSide (playerInTurn state)
 
 getScore :: Board -> Side -> Int
 getScore board side = do
@@ -27,8 +22,8 @@ playGame = do
     let gameBoard = emptyBoard (9,9)
     return 0
 
-playLoop :: Board -> Board -> (Int, Int) -> Side -> (Int, Int)
-playLoop board pastBoard scores sideInTurn = do
+playLoop :: GameState -> (Int, Int)
+playLoop state = do
     (0,0)
 
 moveIsValid :: GameState -> Place -> Bool
@@ -44,9 +39,7 @@ executeMove state place = do
     let newHistory = (board state) : (boardHistory state)
     let newBoard = addStoneToBoard (board state) place (sideInTurn state)
     let (newBoard', capturedAmount) = removeCaptured newBoard place (sideInTurn state)
-    let newCaptured = addCaptured (captured state) (sideInTurn state) capturedAmount
-    let newSideInTurn = opposite (sideInTurn state)
-    GameState {board = newBoard, boardHistory = newHistory, captured = newCaptured, sideInTurn = newSideInTurn }
+    GameState {board = newBoard', boardHistory = newHistory, playerInTurn = (otherPlayer state), otherPlayer = addCaptured (playerInTurn state) capturedAmount }
 
 checkIfSuicide :: Board -> Place -> Side -> Bool
 checkIfSuicide board place side = do
@@ -60,9 +53,5 @@ removeCaptured board place side = do
     (board', points)
 
 testBoard = [[Empty, Empty, Stone White, Empty], [Stone Black, Empty, Stone White, Empty], [Empty, Stone Black, Stone White, Stone White], [Stone Black, Stone Black, Empty, Stone White]]
-testState = GameState { board = testBoard
-        , boardHistory = []
-        , sideInTurn = Black
-        , captured = Captured (Black, 1) (White, 0)
-        }
+
     
