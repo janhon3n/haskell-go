@@ -13,13 +13,12 @@ data GameState = GameState { board :: Board
 sideInTurn :: GameState -> Side
 sideInTurn state = getSide (playerInTurn state)
 
-initiatalState :: BoardDimensions -> GameState
-initiatalState boardDimensions = do
+initiatalState :: BoardDimensions -> (PlayerType, PlayerType) -> GameState
+initiatalState boardDimensions ptypes = do
     GameState { board = emptyBoard boardDimensions
-        , players 
         , boardHistory = []
-        , sideInTurn = Black
-        , captured = Captured (Black, 0) (White, 0)
+        , playerInTurn = Player (fst ptypes) Black 0
+        , otherPlayer = Player (snd ptypes) White 0
     }
 
 getScore :: Board -> Side -> Int
@@ -28,7 +27,6 @@ getScore board side = do
 
 playGame :: IO Int
 playGame = do
-    let gameBoard = emptyBoard (9,9)
     return 0
 
 playLoop :: GameState -> (Int, Int)
