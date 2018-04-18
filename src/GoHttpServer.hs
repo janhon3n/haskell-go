@@ -65,7 +65,7 @@ handleGameTurn = do
             then do
                   let newGameState = executeMove (gameState move) (place move)
                   ok $ toResponse $ encode newGameState
-            else badRequest $ toResponse ("Invalid move" :: String)
+            else noContent $ toResponse ("Invalid move" :: String)
 
 getBody :: ServerPart L.ByteString
 getBody = do

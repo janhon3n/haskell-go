@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   style="shape-rendering:crispEdges"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 74.929146 74.929146"
+   height="74.929146mm"
+   width="74.929146mm">
+  <defs
+     id="defs2">
+    <linearGradient
+       id="linearGradient4797">
+      <stop
+         id="stop4793"
+         offset="0"
+         style="stop-color:#502d16;stop-opacity:1;" />
+      <stop
+         id="stop4795"
+         offset="1"
+         style="stop-color:#502d16;stop-opacity:0;" />
+    </linearGradient>
+    <radialGradient
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1653613,-0.01561286,0.01569877,1.1712592,-12.492936,-41.473174)"
+       r="31.728464"
+       fy="246.90964"
+       fx="52.108677"
+       cy="246.90964"
+       cx="52.108677"
+       id="radialGradient4799"
+       xlink:href="#linearGradient4797" />
+  </defs>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-13.469578,-209.41092)"
+     id="layer1">
+    <circle
+       r="37.464573"
+       cy="246.87549"
+       cx="50.934151"
+       id="path3719"
+       style="fill:#784421;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.01294496" />
+    <ellipse
+       ry="31.878239"
+       rx="31.728464"
+       cy="247.16139"
+       cx="50.778587"
+       id="path3742"
+       style="fill:url(#radialGradient4799);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:10.02973747;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.01294496;opacity:1" />
+  </g>
+</svg>

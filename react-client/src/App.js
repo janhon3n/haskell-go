@@ -1,13 +1,27 @@
-import React, { Component } from "react";
-import "./App.css";
+import React, { Component } from "react"
+import "./App.css"
+import Board from "./Board"
+import Bowl from "./Bowl"
 
 class App extends Component {
   constructor(props) {
     super();
+    this.sendMove = this.sendMove.bind(this)
     this.state = {
       gameState: null,
-      postInProgress: false
+      postInProgress: false,
+      screenSize: {
+        width:0,
+        height:0,
+      }
     };
+  }
+
+  updateScreenSize() {
+    this.setState({screenSize: {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    }})
   }
 
   updateGameState(newGameState) {
@@ -16,14 +30,20 @@ class App extends Component {
       this.setState({ gameState: newGameState });
     }
   }
-
   async componentDidMount() {
+    this.updateScreenSize()
+    window.addEventListener("resize", this.updateScreenSize.bind(this))
+
     let response = await fetch("/game", { method: "get" });
     this.updateGameState(await response.json());
   }
-
+  
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateScreenSize.bind(this))
+  }
+  
   async sendMove(place) {
-    try{
+    try {
       this.setState({ postInProgress: true });
       let response = await fetch("/game", {
         method: "post",
@@ -33,9 +53,10 @@ class App extends Component {
         })
       });
       this.updateGameState(await response.json());
+    } catch (err) {
+      console.log(err);
+    } finally {
       this.setState({ postInProgress: false });
-    } catch(err) {
-      console.log(err)
     }
   }
 
@@ -43,38 +64,25 @@ class App extends Component {
     if (this.state.gameState === null) {
       return <div>Loading...</div>;
     }
+    let boardSize = this.state.screenSize.height * 0.8
+    let bowlSize = boardSize / 3
+    if (this.state.screenSize.width/5 < this.state.screenSize.height/3) {
+      boardSize = this.state.screenSize.width * 0.8 * 3 / 5
+      bowlSize = boardSize / 3
+    }
+
+    let blackPlayer = this.state.gameState.playerInTurn[1] === "Black" ?
+      this.state.gameState.playerInTurn : this.state.gameState.otherPlayer
+    let whitePlayer = this.state.gameState.playerInTurn[1] === "White" ?
+      this.state.gameState.playerInTurn : this.state.gameState.otherPlayer
+
     return (
-      <div>
-        <h1>Haskell Go!</h1>
-        {<h2>{this.state.gameState.playerInTurn[1]} players turn</h2>}
-        <div className="board">
-          {this.state.gameState !== null &&
-            this.state.gameState.board.map((row, i) => {
-              return (
-                <div className="row">
-                  {row.map((place, j) => {
-                    if (place.tag === "Empty") {
-                      return (
-                        <div
-                          className={"place " + place.tag.toLowerCase()}
-                          onClick={() => {
-                            if (place.tag === "Empty") this.sendMove([i, j]);
-                          }}
-                        />
-                      );
-                    } else {
-                      return (
-                        <div
-                          className={"place " + place.contents.toLowerCase()}
-                        />
-                      );
-                    }
-                  })}
-                </div>
-              );
-            })}
-        </div>
-        {this.state.postInProgress && <h3>Posting your move...</h3>}
+      <div className="App">
+        <main>
+          <Bowl side="black" stoneCount={blackPlayer[2]} size={bowlSize}/>
+          <Board board={this.state.gameState.board} size={boardSize} onMove={this.sendMove}/>
+          <Bowl side="white" stoneCount={whitePlayer[2]} size={bowlSize} align="end"/>
+        </main>
       </div>
     );
   }
