@@ -8,18 +8,31 @@
   background-color:rgb(236, 227, 211);
   width:500px;
   height:500px;
-  justify-content:space-between;
+  justify-content:space-around;
   padding:15px;
 }
 
 .row {
   display:flex;
   flex-direction: row;
-  justify-content:space-between;
+  justify-content:space-around;
+  flex-grow:1;
 }
 
 .place {
   text-align:center;
+  flex-grow:1;
+  background-size: 80% 80%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.black {
+  background-image: url("/stone_black.svg")
+}
+
+.white {
+  background-image: url("/stone_white.svg")
 }
 
 @keyframes App-logo-spin {

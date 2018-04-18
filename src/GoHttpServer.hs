@@ -5,6 +5,7 @@ import Go
 import Board
 import Player
 
+import Data.Maybe
 import Data.Aeson
 import Data.Data (Data, Typeable)
 import Data.ByteString.Lazy.Char8 as L
@@ -25,7 +26,10 @@ instance ToJSON Player
 instance FromJSON GameState
 instance ToJSON GameState
 
-data JSONMove = JSONMove GameState Place deriving (Show, Eq, Generic)
+data JSONMove = JSONMove { gameState :: GameState
+      , place :: Place
+} deriving (Show, Eq, Generic)
+
 instance FromJSON JSONMove
 instance ToJSON JSONMove
 
@@ -56,8 +60,12 @@ handlers = do
 handleGameTurn :: ServerPart Response
 handleGameTurn = do
       body <- getBody
-      let gameState = decode body :: Maybe GameState
-      ok $ toResponse $ encode gameState 
+      let move = fromJust $ decode body :: JSONMove
+      if moveIsValid (gameState move) (place move)
+            then do
+                  let newGameState = executeMove (gameState move) (place move)
+                  ok $ toResponse $ encode newGameState
+            else badRequest $ toResponse ("Invalid move" :: String)
 
 getBody :: ServerPart L.ByteString
 getBody = do
