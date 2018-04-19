@@ -63,25 +63,27 @@ checkIfSuicide :: Board -> Place -> Side -> Bool
 checkIfSuicide board place side = do
     and $ map (\place -> dataAtPlace board place == (Stone (opposite side))) $ getAdjacentPlaces board place
             
-{- Move must be checked to be valid before executing it -}
+{- Move MUST be checked to be valid before executing it! -}
 executeMove :: GameState -> Move -> GameState
-executeMove state@(GameState board boardHistory playerInTurn otherPlayer gameOver) (Move Passing _) = do 
-    let newOtherPlayer = (Player (playerType playerInTurn) (playerSide playerInTurn) (captured playerInTurn) True False)
-    GameState board boardHistory otherPlayer newOtherPlayer gameOver
+executeMove state@(GameState board boardHistory playerInTurn otherPlayer gameOver) (Move moveType movePlace) = do
+    case moveType of
+        Passing -> do
+            let newOtherPlayer = (Player (playerType playerInTurn) (playerSide playerInTurn) (captured playerInTurn) True False)
+            GameState board boardHistory otherPlayer newOtherPlayer gameOver
 
-executeMove state@(GameState board boardHistory playerInTurn otherPlayer gameOver) (Move Finishing _) = do
-    if (hasFinished otherPlayer) then GameState board boardHistory otherPlayer playerInTurn True
-    else do
-        let newOtherPlayer = (Player (playerType playerInTurn) (playerSide playerInTurn) (captured playerInTurn) False True)
-        GameState board boardHistory otherPlayer newOtherPlayer gameOver
+        Finishing -> do
+            if (hasFinished otherPlayer) then GameState board boardHistory otherPlayer playerInTurn True
+            else do
+                let newOtherPlayer = (Player (playerType playerInTurn) (playerSide playerInTurn) (captured playerInTurn) False True)
+                GameState board boardHistory otherPlayer newOtherPlayer gameOver
 
-executeMove state@(GameState board boardHistory playerInTurn otherPlayer gameOver) move@(Move moveType movePlace) = do
-    let newHistory = board : boardHistory
-    let newBoard = addStoneToBoard board movePlace (sideInTurn state)
-    let (newBoard', capturedAmount) = removeCaptured newBoard movePlace (sideInTurn state)
-    let newPlayerInTurn = otherPlayer
-    let newOtherPlayer = (Player (playerType playerInTurn) (playerSide playerInTurn) (captured playerInTurn + capturedAmount) False False)
-    GameState newBoard' newHistory newPlayerInTurn newOtherPlayer False
+        StonePlacing -> do
+            let newHistory = board : boardHistory
+            let newBoard = addStoneToBoard board movePlace (sideInTurn state)
+            let (newBoard', capturedAmount) = removeCaptured newBoard movePlace (sideInTurn state)
+            let newPlayerInTurn = otherPlayer
+            let newOtherPlayer = (Player (playerType playerInTurn) (playerSide playerInTurn) (captured playerInTurn + capturedAmount) False False)
+            GameState newBoard' newHistory newPlayerInTurn newOtherPlayer False
 
 removeCaptured :: Board -> Place -> Side -> (Board, Int)
 removeCaptured board place side = do
