@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import Board from "./Board";
 import Bowl from "./Bowl";
+import ActionMenu from "./ActionMenu";
 
 class App extends Component {
   constructor(props) {
@@ -51,7 +52,10 @@ class App extends Component {
         method: "post",
         body: JSON.stringify({
           gameState: this.state.gameState,
-          place: place
+          move: {
+            moveType: "StonePlacing",
+            place: place
+          }
         })
       });
       this.updateGameState(await response.json());
@@ -74,11 +78,11 @@ class App extends Component {
     }
 
     let blackPlayer =
-      this.state.gameState.playerInTurn[1] === "Black"
+      this.state.gameState.playerInTurn.playerSide === "Black"
         ? this.state.gameState.playerInTurn
         : this.state.gameState.otherPlayer;
     let whitePlayer =
-      this.state.gameState.playerInTurn[1] === "White"
+      this.state.gameState.playerInTurn.playerSide === "White"
         ? this.state.gameState.playerInTurn
         : this.state.gameState.otherPlayer;
 
@@ -86,13 +90,15 @@ class App extends Component {
       <div className="App">
         <main>
           <div className="sideMenu">
-            <Bowl side="black" stoneCount={whitePlayer[2]} size={bowlSize} />
-            <div style={{
-              fontSize: bowlSize / 9 + 'px',
-            }}>
-              <button>Pass</button>
-              <button>Declare finished</button>
-            </div>
+            <Bowl
+              side="black"
+              stoneCount={whitePlayer.captured}
+              size={bowlSize}
+            />
+            <ActionMenu
+              active={this.state.gameState.playerInTurn.playerSide === "White"}
+              size={bowlSize / 9}
+            />
           </div>
           <Board
             board={this.state.gameState.board}
@@ -100,15 +106,13 @@ class App extends Component {
             onMove={this.sendMove}
           />
           <div className="sideMenu">
-            <div style={{
-              fontSize: bowlSize / 9 + 'px',
-            }}>
-              <button>Pass</button>
-              <button>Declare finished</button>
-            </div>
+            <ActionMenu
+              active={this.state.gameState.playerInTurn.playerSide === "Black"}
+              size={bowlSize / 9}
+            />
             <Bowl
               side="white"
-              stoneCount={blackPlayer[2]}
+              stoneCount={blackPlayer.captured}
               size={bowlSize}
               align="end"
             />

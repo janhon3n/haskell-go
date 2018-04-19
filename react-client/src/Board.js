@@ -25,7 +25,7 @@ export default class Board extends Component {
                         className={
                           place.tag === "Empty"
                             ? "place " + place.tag.toLowerCase()
-                            : "place " + place.contents.toLowerCase()
+                            : "place " + place.side.toLowerCase()
                         }
                         onClick={() => {
                           if (place.tag === "Empty") this.props.onMove([i, j]);
