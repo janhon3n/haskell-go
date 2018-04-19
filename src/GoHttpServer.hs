@@ -17,6 +17,10 @@ import GHC.Generics
 
 instance FromJSON Side
 instance ToJSON Side
+instance FromJSON MoveType
+instance ToJSON MoveType
+instance FromJSON Move
+instance ToJSON Move
 instance FromJSON PlaceData
 instance ToJSON PlaceData
 instance FromJSON PlayerType
@@ -27,7 +31,7 @@ instance FromJSON GameState
 instance ToJSON GameState
 
 data JSONMove = JSONMove { gameState :: GameState
-      , place :: Place
+      , move :: Move
 } deriving (Show, Eq, Generic)
 
 instance FromJSON JSONMove
@@ -60,10 +64,10 @@ handlers = do
 handleGameTurn :: ServerPart Response
 handleGameTurn = do
       body <- getBody
-      let move = fromJust $ decode body :: JSONMove
-      if moveIsValid (gameState move) (place move)
+      let gameData = fromJust $ decode body :: JSONMove
+      if moveIsValid (gameState gameData) (move gameData)
             then do
-                  let newGameState = executeMove (gameState move) (place move)
+                  let newGameState = executeMove (gameState gameData) (move gameData)
                   ok $ toResponse $ encode newGameState
             else noContent $ toResponse ("Invalid move" :: String)
 

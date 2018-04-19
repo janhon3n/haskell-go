@@ -25,13 +25,14 @@ getAdjacentPlaces :: Board -> Place -> [Place]
 getAdjacentPlaces board place = filter (placeIsValid board) [downOf place, upOf place, leftOf place, rightOf place]
 
 {- PlaceData = paikan sisältö (tyhjä, musta tai valkoinen -}
-data PlaceData = Empty | Stone Side deriving (Eq, Show, Generic)
+data PlaceData = Empty | Stone {
+    side :: Side
+ } deriving (Eq, Show, Generic)
 type BoardDimensions = (Int, Int)
 
 {- esim [Empty, Empty, Stone Black, Stone White] -}
 type Row = [PlaceData]
 type Board = [Row]
-
 
 {- Empty board creation -}
 emptyBoard :: BoardDimensions -> Board
@@ -52,15 +53,12 @@ columnCount board = snd (getDimensions board)
 dataAtPlace :: Board -> Place -> PlaceData
 dataAtPlace board place = board !! (fst place) !! (snd place)
 
-
 {- Returns true if place is inside the board -}
 placeIsValid :: Board -> Place -> Bool
 placeIsValid [] _ = False
 placeIsValid board place = if fst place >= length board || fst place < 0 || snd place >= length (board !! 0) || snd place < 0
     then False
     else True
-
-
 
 {- TODO Add a PlaceData to the board for position Place -}
 addStoneToBoard :: Board -> Place -> Side -> Board
