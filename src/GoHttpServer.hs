@@ -55,7 +55,7 @@ handlers = do
       decodeBody bodyPolicy
       msum [ dir "game" $ do
                   method GET
-                  ok $ toResponse $ encode (initialState (9,9) (Human, Human))
+                  ok $ toResponse $ encode (initialState (6,6) (Human, Human))
             , dir "game" $ do
                   method POST
                   handleGameTurn

@@ -46,7 +46,7 @@ playLoop state = do
 
 moveIsValid :: GameState -> Move -> Bool
 moveIsValid state (Move Passing _) = (gameOver state /= True) &&
-        (hasPassed (playerInTurn state) /= True && hasPassed (otherPlayer state) /= True)
+        (hasPassed (playerInTurn state) /= True || hasPassed (otherPlayer state) /= True)
 
 moveIsValid state (Move Finishing _) = not $ gameOver state
 
@@ -74,7 +74,7 @@ executeMove state@(GameState board boardHistory playerInTurn otherPlayer gameOve
         Finishing -> do
             if (hasFinished otherPlayer) then GameState board boardHistory otherPlayer playerInTurn True
             else do
-                let newOtherPlayer = (Player (playerType playerInTurn) (playerSide playerInTurn) (captured playerInTurn) False True)
+                let newOtherPlayer = (Player (playerType playerInTurn) (playerSide playerInTurn) (captured playerInTurn) True True)
                 GameState board boardHistory otherPlayer newOtherPlayer gameOver
 
         StonePlacing -> do

@@ -9,8 +9,8 @@ export default class ActionMenu extends Component {
           fontSize: this.props.size + "px"
         }}
         >
-        <button>Pass</button>
-        <button>Declare finished</button>
+        {this.props.passAvailable && (<button onClick={this.props.onPassing} >Pass</button>)}
+        <button onClick={this.props.onDeclareFinished}>Declare finished</button>
       </div>
     );
   }

@@ -8,6 +8,9 @@ class App extends Component {
   constructor(props) {
     super();
     this.sendMove = this.sendMove.bind(this);
+    this.placeStone = this.placeStone.bind(this);
+    this.passTurn = this.passTurn.bind(this);
+    this.declareFinished = this.declareFinished.bind(this);
     this.state = {
       gameState: null,
       postInProgress: false,
@@ -45,19 +48,17 @@ class App extends Component {
     window.removeEventListener("resize", this.updateScreenSize.bind(this));
   }
 
-  async sendMove(place) {
+  async sendMove(move) {
     try {
       this.setState({ postInProgress: true });
       let response = await fetch("/game", {
         method: "post",
         body: JSON.stringify({
           gameState: this.state.gameState,
-          move: {
-            moveType: "StonePlacing",
-            place: place
-          }
+          move: move
         })
       });
+      console.log(response);
       this.updateGameState(await response.json());
     } catch (err) {
       console.log(err);
@@ -66,9 +67,33 @@ class App extends Component {
     }
   }
 
+  placeStone(place) {
+    this.sendMove({
+      moveType: "StonePlacing",
+      place: place
+    });
+  }
+
+  passTurn() {
+    this.sendMove({
+      moveType: "Passing",
+      place: [0, 0]
+    });
+  }
+
+  declareFinished() {
+    this.sendMove({
+      moveType: "Finishing",
+      place: [0, 0]
+    });
+  }
+
   render() {
     if (this.state.gameState === null) {
       return <div>Loading...</div>;
+    }
+    if (this.state.gameState.gameOver) {
+      return <div>GAME OVER</div>;
     }
     let boardSize = this.state.screenSize.height * 0.8;
     let bowlSize = boardSize / 3;
@@ -96,6 +121,12 @@ class App extends Component {
               size={bowlSize}
             />
             <ActionMenu
+              passAvailable={
+                this.state.gameState.playerInTurn.playerSide === "White" &&
+                !this.state.gameState.playerInTurn.hasPassed
+              }
+              onPassing={this.passTurn}
+              onDeclareFinished={this.declareFinished}
               active={this.state.gameState.playerInTurn.playerSide === "White"}
               size={bowlSize / 9}
             />
@@ -103,10 +134,16 @@ class App extends Component {
           <Board
             board={this.state.gameState.board}
             size={boardSize}
-            onMove={this.sendMove}
+            onMove={this.placeStone}
           />
           <div className="sideMenu">
             <ActionMenu
+              passAvailable={
+                this.state.gameState.playerInTurn.playerSide === "Black" &&
+                !this.state.gameState.playerInTurn.hasPassed
+              }
+              onPassing={this.passTurn}
+              onDeclareFinished={this.declareFinished}
               active={this.state.gameState.playerInTurn.playerSide === "Black"}
               size={bowlSize / 9}
             />
