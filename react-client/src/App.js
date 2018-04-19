@@ -106,13 +106,27 @@ class App extends Component {
       this.state.gameState.playerInTurn.playerSide === "Black"
         ? this.state.gameState.playerInTurn
         : this.state.gameState.otherPlayer;
+
     let whitePlayer =
       this.state.gameState.playerInTurn.playerSide === "White"
         ? this.state.gameState.playerInTurn
         : this.state.gameState.otherPlayer;
 
+    blackPlayer.passAvailable = !(
+      (blackPlayer.hasPassed && whitePlayer.hasPassed) ||
+      whitePlayer.hasFinished
+    );
+
+    whitePlayer.passAvailable = !(
+      (blackPlayer.hasPassed && whitePlayer.hasPassed) ||
+      blackPlayer.hasFinished
+    );
+
     return (
-      <div className="App">
+      <div className="App" style={{
+        borderLeft: boardSize / 20 + 'px solid #CCC',
+        borderRight: boardSize / 20 + 'px solid black',
+      }}>
         <main>
           <div className="sideMenu">
             <Bowl
@@ -121,10 +135,7 @@ class App extends Component {
               size={bowlSize}
             />
             <ActionMenu
-              passAvailable={
-                this.state.gameState.playerInTurn.playerSide === "White" &&
-                !this.state.gameState.playerInTurn.hasPassed
-              }
+              passAvailable={whitePlayer.passAvailable}
               onPassing={this.passTurn}
               onDeclareFinished={this.declareFinished}
               active={this.state.gameState.playerInTurn.playerSide === "White"}
@@ -138,10 +149,7 @@ class App extends Component {
           />
           <div className="sideMenu">
             <ActionMenu
-              passAvailable={
-                this.state.gameState.playerInTurn.playerSide === "Black" &&
-                !this.state.gameState.playerInTurn.hasPassed
-              }
+              passAvailable={blackPlayer.passAvailable}
               onPassing={this.passTurn}
               onDeclareFinished={this.declareFinished}
               active={this.state.gameState.playerInTurn.playerSide === "Black"}

@@ -46,7 +46,8 @@ playLoop state = do
 
 moveIsValid :: GameState -> Move -> Bool
 moveIsValid state (Move Passing _) = (gameOver state /= True) &&
-        (hasPassed (playerInTurn state) /= True || hasPassed (otherPlayer state) /= True)
+        (hasPassed (playerInTurn state) /= True || hasPassed (otherPlayer state) /= True) &&
+        (hasFinished (otherPlayer state) /= True)
 
 moveIsValid state (Move Finishing _) = not $ gameOver state
 
