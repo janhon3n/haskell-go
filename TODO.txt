@@ -1,4 +1,5 @@
-fix: suicide
+:) fix: suicide
+
 fix: et voi laittaa toisen alueen sisään? ???
 fix: ei voi ohittaa, jos toinen haluaa lopettaa
 

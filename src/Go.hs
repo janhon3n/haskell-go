@@ -50,18 +50,20 @@ moveIsValid state (Move Passing _) = (gameOver state /= True) &&
 
 moveIsValid state (Move Finishing _) = not $ gameOver state
 
-moveIsValid state (Move StonePlacing place) = do
+moveIsValid state move@(Move StonePlacing place) = do
     if (gameOver state) then False
     else do
         placeIsValid (board state) place &&
             dataAtPlace (board state) place == Empty &&
             checkIfSuicide (board state) place (sideInTurn state) /= True &&
             not (length (boardHistory state) >= 2 &&
-            (boardHistory state) !! 1 == (addStoneToBoard (board state) place (sideInTurn state)))
+            (boardHistory state) !! 0 == board (executeMove state move))
 
 checkIfSuicide :: Board -> Place -> Side -> Bool
 checkIfSuicide board place side = do
-    and $ map (\place -> dataAtPlace board place == (Stone (opposite side))) $ getAdjacentPlaces board place
+    let board' = addStoneToBoard board place side
+    let (board'', _) = removeCaptured board' place side
+    and $ map (\place -> dataAtPlace board'' place == (Stone (opposite side))) $ getAdjacentPlaces board'' place
             
 {- Move MUST be checked to be valid before executing it! -}
 executeMove :: GameState -> Move -> GameState
@@ -91,5 +93,3 @@ removeCaptured board place side = do
     let points = sum (map length capturedRegions)
     let board' = foldl (\b r -> fillRegion b r Empty) board capturedRegions
     (board', points)
-
-testBoard = [[Empty, Empty, Stone White, Empty], [Stone Black, Empty, Stone White, Empty], [Empty, Stone Black, Stone White, Stone White], [Stone Black, Stone Black, Empty, Stone White]]
