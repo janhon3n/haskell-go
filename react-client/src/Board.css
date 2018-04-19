@@ -1,6 +1,8 @@
 .boardWrapper {
   background-color:rgb(218, 199, 167);
+  background:url('/wood.jpg');
   box-shadow: -3px -3px 30px rgba(0,0,0,0.5);
+  position: relative;
 }
 
 .board {
@@ -31,7 +33,7 @@
 .place {
   height:100%;
   width:100%;
-  background-size: 80% 80%;
+  background-size: 97% 97%;
   background-position: center;
   background-repeat: no-repeat;
   position:relative;
