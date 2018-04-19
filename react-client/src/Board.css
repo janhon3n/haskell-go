@@ -1,6 +1,6 @@
 .boardWrapper {
-  background-color:rgb(236, 227, 211);
-  box-shadow: -3px -3px 25px rgba(0,0,0,0.5);
+  background-color:rgb(218, 199, 167);
+  box-shadow: -3px -3px 30px rgba(0,0,0,0.5);
 }
 
 .board {
@@ -8,7 +8,6 @@
   flex-direction: column;
   justify-content: space-around;
   position: relative;
-  cursor: url("/hand.png"), auto;
 }
 
 .row {

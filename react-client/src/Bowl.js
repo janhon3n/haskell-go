@@ -8,7 +8,6 @@ export default class Bowl extends Component {
     return (
       <div style={{
         textAlign:'center',
-        alignSelf: this.props.align === "end" ? "flex-end" : "flex-start"
       }}>
         <div
           style={{
@@ -22,7 +21,7 @@ export default class Bowl extends Component {
         >
           {[...Array(this.props.stoneCount)].map((_, i) => {
             let angle = random() * 2 * Math.PI;
-            let step = random() * this.props.size / 2.5;
+            let step = random() * this.props.size / 3;
             let offsetX = step * Math.cos(angle);
             let offsetY = step * Math.sin(angle);
             return (
@@ -39,7 +38,9 @@ export default class Bowl extends Component {
             );
           })}
         </div>
-        <div>{this.props.stoneCount}</div>
+        <div className="countLable" style={{
+          fontSize: this.props.size / 6 + 'px',
+        }}>{this.props.stoneCount}</div>
       </div>
     );
   }

@@ -1,15 +1,16 @@
 body {
+  font-family: 'Indie Flower', cursive;
   height:100vh;
   width:100vw;
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
-  background: linear-gradient(bottom, rgb(5, 73, 5), rgb(7, 63, 21));
+  background: linear-gradient(bottom, rgb(5, 73, 5), rgb(6, 54, 20));
   display:flex;
   justify-content: center;
   box-sizing: border-box;
   color:rgb(194, 194, 194);
   text-shadow: 1px 1px 3px black;
+  font-size: 100%;
 }
 #root {
   width:100vw;

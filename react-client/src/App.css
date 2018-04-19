@@ -11,3 +11,21 @@ main {
   direction:row;
   justify-content: space-around;
 }
+.sideMenu {
+  display:flex;
+  flex-direction:column;
+  justify-content: space-between;
+}
+
+button {
+  display:block;
+  width:100%;
+  margin:5%;
+  font-size: inherit;
+  background-color: rgba(0,0,0,0);
+  outline: none;
+  padding:5px;
+  color:white;
+  font-family: inherit;
+  border:none;
+}
