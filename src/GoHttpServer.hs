@@ -59,6 +59,9 @@ handlers = do
             , dir "game" $ do
                   method POST
                   handleGameTurn
+            , do
+                  nullDir
+                  movedPermanently ("/index.html"::String) (toResponse ("Redirected to /index.html"::String))
             , serveDirectory EnableBrowsing [] "./react-client/build" ]
 
 handleGameTurn :: ServerPart Response
