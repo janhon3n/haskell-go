@@ -1,0 +1,8 @@
+fix: suicide
+fix: et voi laittaa toisen alueen sisään? ???
+fix: ei voi ohittaa, jos toinen haluaa lopettaa
+
+tee: pelin lopuks poista kuolleet -> lisää captureihin
+tee: laske pisteet
+tee: anna voittaja
+tee: alkumenu pöydät (9x9, 13x13, 19x19)
