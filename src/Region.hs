@@ -57,3 +57,6 @@ getBorderRegion' board region regionToCheck@(place:restOfRegion) = do
 
 fillRegion :: Board -> Region -> PlaceData -> Board
 fillRegion board region dat = foldl (\b p -> setDataAtPlace b p dat) board region
+
+getScore :: Board -> Side -> Int
+getScore board side = 25

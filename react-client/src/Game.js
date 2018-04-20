@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import "./Game.css";
 import Board from "./Board";
 import Bowl from "./Bowl";
-import ActionMenu from "./ActionMenu";
+import ActionMenu from "./ActionMenu"
+import EndMenu from "./EndMenu"
 
 class Game extends Component {
   constructor(props) {
@@ -98,15 +99,13 @@ class Game extends Component {
     if (this.state.gameState === null) {
       return <div>Loading...</div>;
     }
-    if (this.state.gameState.gameOver) {
-      return <div>GAME OVER</div>;
-    }
+
     let boardSize = this.state.screenSize.height * 0.8;
-    let bowlSize = boardSize / 3;
     if (this.state.screenSize.width / 5 < this.state.screenSize.height / 3) {
       boardSize = this.state.screenSize.width * 0.8 * 3 / 5;
-      bowlSize = boardSize / 3;
     }
+    let bowlSize = boardSize / 3
+    let textSize = bowlSize / 9
 
     let blackPlayer =
       this.state.gameState.playerInTurn.playerSide === "Black"
@@ -129,13 +128,7 @@ class Game extends Component {
     );
 
     return (
-      <div
-        className="Game"
-        style={{
-          borderLeft: boardSize / 20 + "px solid #CCC",
-          borderRight: boardSize / 20 + "px solid black"
-        }}
-      >
+      <div className="Game">
         <main>
           <div className="sideMenu">
             <Bowl
@@ -143,13 +136,23 @@ class Game extends Component {
               stoneCount={whitePlayer.captured}
               size={bowlSize}
             />
-            <ActionMenu
-              passAvailable={whitePlayer.passAvailable}
-              onPassing={this.passTurn}
-              onDeclareFinished={this.declareFinished}
-              active={this.state.gameState.playerInTurn.playerSide === "White"}
-              size={bowlSize / 9}
+            {!this.state.gameState.gameOver ? (
+              <ActionMenu
+                passAvailable={whitePlayer.passAvailable}
+                onPassing={this.passTurn}
+                onDeclareFinished={this.declareFinished}
+                active={
+                  this.state.gameState.playerInTurn.playerSide === "White"
+                }
+                size={textSize}
+              />
+            ) : (
+              <EndMenu
+              size={textSize}
+              score={whitePlayer.finalScore}
+              onExit={this.props.onEnd}
             />
+            )}
           </div>
           <Board
             board={this.state.gameState.board}
@@ -157,13 +160,23 @@ class Game extends Component {
             onMove={this.placeStone}
           />
           <div className="sideMenu">
-            <ActionMenu
-              passAvailable={blackPlayer.passAvailable}
-              onPassing={this.passTurn}
-              onDeclareFinished={this.declareFinished}
-              active={this.state.gameState.playerInTurn.playerSide === "Black"}
-              size={bowlSize / 9}
-            />
+            {!this.state.gameState.gameOver ? (
+              <ActionMenu
+                passAvailable={blackPlayer.passAvailable}
+                onPassing={this.passTurn}
+                onDeclareFinished={this.declareFinished}
+                active={
+                  this.state.gameState.playerInTurn.playerSide === "Black"
+                }
+                size={textSize}
+              />
+            ) : (
+              <EndMenu
+                size={textSize}
+                score={blackPlayer.finalScore}
+                onExit={this.props.onEnd}
+              />
+            )}
             <Bowl
               side="white"
               stoneCount={blackPlayer.captured}

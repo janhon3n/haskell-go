@@ -4,10 +4,11 @@ import MainMenu from "./MainMenu";
 
 export default class App extends Component {
   constructor(props) {
-    super(props);
-    this.setPlayerTypes = this.setPlayerTypes.bind(this);
-    this.setBoardSize = this.setBoardSize.bind(this);
-    this.startNewGame = this.startNewGame.bind(this);
+    super(props)
+    this.setPlayerTypes = this.setPlayerTypes.bind(this)
+    this.setBoardSize = this.setBoardSize.bind(this)
+    this.startNewGame = this.startNewGame.bind(this)
+    this.endGame = this.endGame.bind(this)
     this.state = {
       view: "menu",
       playerTypes: ["Human", "Human"],
@@ -25,6 +26,10 @@ export default class App extends Component {
 
   startNewGame() {
     this.setState({ view: "game" });
+  }
+
+  endGame() {
+    this.setState({ view: "menu" })
   }
 
   render() {
@@ -45,6 +50,7 @@ export default class App extends Component {
           <Game
             boardSize={this.state.boardSize}
             playerTypes={this.state.playerTypes}
+            onEnd={this.endGame}
           />
         );
         break;
