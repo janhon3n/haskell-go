@@ -37,6 +37,12 @@ data JSONMove = JSONMove { gameState :: GameState
 instance FromJSON JSONMove
 instance ToJSON JSONMove
 
+data JSONNewGame = JSONNewGame { boardSize :: Int, playerTypes :: (PlayerType, PlayerType)} deriving (Show, Eq, Generic)
+
+
+instance FromJSON JSONNewGame
+instance ToJSON JSONNewGame
+
 conf :: Conf
 conf = Conf { port = 3008
       , validator = Nothing
@@ -59,10 +65,21 @@ handlers = do
             , dir "game" $ do
                   method POST
                   handleGameTurn
+            , dir "newgame" $ do
+                  method POST
+                  handleNewGame
             , do
                   nullDir
                   movedPermanently ("/index.html"::String) (toResponse ("Redirected to /index.html"::String))
             , serveDirectory EnableBrowsing [] "./react-client/build" ]
+
+handleNewGame :: ServerPart Response
+handleNewGame = do
+      body <- getBody
+      let newGameData = fromJust $ decode body :: JSONNewGame
+      let boardDimensions = ((boardSize newGameData), (boardSize newGameData))
+      ok $ toResponse $ encode (initialState boardDimensions (playerTypes newGameData))
+
 
 handleGameTurn :: ServerPart Response
 handleGameTurn = do

@@ -5,7 +5,7 @@ import Board
 import UI
 import GHC.Generics
 
-data PlayerType = Human | DumbAi | SmartAi deriving (Eq, Show, Generic)
+data PlayerType = Human | RandomAI | TreeAI deriving (Eq, Show, Generic)
 data Player = Player { playerType :: PlayerType
     , playerSide :: Side
     , captured :: Int
@@ -24,8 +24,8 @@ class DecisionMaker a where
 instance DecisionMaker Player where
     choosePlace player@(Player playerType playerSide captured hasPassed hasFinished) board = case playerType of
         Human -> getPlace playerSide (getDimensions board)
-        DumbAi -> return $ chooseFirstEmptyPlace player board (0,0)
-        SmartAi -> return (0,0)
+        RandomAI -> return $ chooseFirstEmptyPlace player board (0,0)
+        TreeAI -> return (0,0)
 
 chooseFirstEmptyPlace :: Player -> Board -> Place -> Place
 chooseFirstEmptyPlace player board place = do

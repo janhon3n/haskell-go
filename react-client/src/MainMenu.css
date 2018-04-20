@@ -1,0 +1,24 @@
+.MainMenu {
+   display:flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   font-size:4vh;
+}
+
+.MainMenu ul {
+   text-align: center;
+}
+
+.MainMenu ul li {
+   list-style-type: none;
+   margin:0px;
+   padding:0px;
+   cursor:pointer;
+}
+.MainMenu ul li.selected::before {
+   content: '-> ';
+}
+.MainMenu ul li.selected::after {
+   content: ' <-';
+}
