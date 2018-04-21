@@ -20,10 +20,17 @@
 }
 
 .placeBox {
-  border:1px solid black;
+  border-right:1px solid black;
+  border-bottom:1px solid black;
   flex-grow:1;
 }
-.placeBox:last-child {
+.placeBox:first-child {
+  border-left:1px solid black;
+}
+.row:first-child .placeBox {
+  border-top:1px solid black;
+}
+.row .placeBox:last-child {
   border:0px;
 }
 .row:last-child .placeBox {

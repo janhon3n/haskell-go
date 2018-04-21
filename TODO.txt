@@ -1,9 +1,10 @@
 :) fix: suicide
 :) fix: ei voi ohittaa, jos toinen haluaa lopettaa
+:) tee: alkumenu pöydät (9x9, 13x13, 19x19)
 
 fix: et voi laittaa toisen alueen sisään? ???
 
-tee: pelin lopuks poista kuolleet -> lisää captureihin
+tee: pelin lopuks poista kuolleet -> lisää finalScoreen
 tee: laske pisteet (ADRIAN)
-tee: anna voittaja
-tee: alkumenu pöydät (9x9, 13x13, 19x19)
+
+tee: tekoälyt
