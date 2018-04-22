@@ -73,7 +73,6 @@ setDataAtPlace board place placeData = do
         then map (\(rowIndex, row) -> map (\(columnIndex, dataa) -> if (rowIndex, columnIndex) == place then placeData else dataa) (zip [0..] row)) (zip [0..] board)
         else board
     
-{- Turha ehkä -}
 nextPlace :: Board -> Place -> Place
 nextPlace board place = do
     if (snd place >= snd (getDimensions board) - 1)

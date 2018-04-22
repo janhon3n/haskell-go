@@ -3,8 +3,6 @@
 module GoHttpServer where
 import Go
 import Board
-import GameState
-import Move
 import Player
 
 import Data.Maybe
@@ -92,8 +90,7 @@ handleGameTurn = do
                   let newGameState = executeMove (gameState gameData) (move gameData)
                   if playerType (playerInTurn newGameState) /= Human
                         then do
-                              let aiMove = chooseValidMove newGameState
-                              ok $ toResponse $ encode $ executeMove newGameState aiMove
+                              ok $ toResponse $ encode $ executeAITurn newGameState
                         else ok $ toResponse $ encode newGameState
             else noContent $ toResponse ("Invalid move" :: String)
 
