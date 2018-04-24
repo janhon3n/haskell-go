@@ -1,2 +1,6 @@
 FROM haskell:8
-RUN stack install haskell-go
+
+WORKDIR /dockerr
+ADD . /dockerr
+
+RUN stack ghci
