@@ -38,15 +38,11 @@ moveIsValid state move@(Move StonePlacing place) = do
       else do
          placeIsValid (board state) place &&
             dataAtPlace (board state) place == Empty &&
-            isSuicide state move /= True &&
+            isSuicide (board state) place (sideInTurn state) /= True &&
             not (length (boardHistory state) >= 2 &&
             (boardHistory state) !! 0 == board (executeMove state move))
 
-isSuicide :: GameState -> Move -> Bool
-isSuicide state move@(Move StonePlacing place) = do
-      let newState = executeMove state move
-      isDead (board newState) (getUniformRegion (board newState) place)
-            
+
 {- Move MUST be checked to be valid before executing it! -}
 executeMove :: GameState -> Move -> GameState
 executeMove state@(GameState board boardHistory playerInTurn otherPlayer gameOver) (Move moveType movePlace) = do
@@ -68,25 +64,10 @@ executeMove state@(GameState board boardHistory playerInTurn otherPlayer gameOve
 
          StonePlacing -> do
             let newHistory = board : boardHistory
-            let newBoard = addStoneToBoard board movePlace (sideInTurn state)
-            let (newBoard', capturedAmount) = removeCaptured newBoard movePlace (sideInTurn state)
+            let (newBoard, capturedAmount) = placeStone newBoard movePlace (sideInTurn state)
             let newPlayerInTurn = otherPlayer
             let newOtherPlayer = (Player (playerType playerInTurn) (playerSide playerInTurn) (captured playerInTurn + capturedAmount) False False 0)
-            GameState newBoard' newHistory newPlayerInTurn newOtherPlayer False
-
-removeCaptured :: Board -> Place -> Side -> (Board, Int)
-removeCaptured board place side = do
-   let places = filter (\p -> dataAtPlace board p == (Stone (opposite side))) $ getAdjacentPlaces board place
-   let adjacentRegions = foldl (\regs p -> do
-         let newReg = getUniformRegion board p
-         if elem newReg regs
-            then regs
-            else newReg : regs
-         ) [] places
-   let capturedRegions = filter (isDead board) adjacentRegions
-   let points = sum $ map length capturedRegions
-   let board' = foldl (\b r -> setRegionContent b r Empty) board capturedRegions
-   (board', points)
+            GameState newBoard newHistory newPlayerInTurn newOtherPlayer False
 
 chooseValidMove :: GameState -> Move
 chooseValidMove state = chooseValidMove' state 10

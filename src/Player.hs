@@ -22,8 +22,6 @@ data Player = Player { playerType :: PlayerType
  } deriving (Eq, Show, Generic)
 
 
-data BoardTree = BoardTree Board [BoardTree]
-
 addCaptured :: Player -> Int -> Player
 addCaptured (Player ptype side captured hasPassed hasFinished finalScore) amount = Player ptype side (captured + amount) hasPassed hasFinished finalScore
 
@@ -33,6 +31,24 @@ chooseMove player@(Player playerType playerSide captured hasPassed hasFinished f
         RandomAI -> Move Passing (0,0)
         TreeAI -> Move Passing (0,0)
 
+
 evaluateBoard :: Board -> Side -> Int
 evaluateBoard board side = do
-    getScore board side
+    (getScore board side) - (getScore board (opposite side))
+
+data MinMaxPhase = Min | Max
+type Depth = Int
+data BoardNode = BoardNode Board Side
+
+getChildNodes :: BoardNode -> [BoardNode]
+getChildNodes node@(BoardNode board side) = do
+    map (\p -> BoardNode (fst (placeStone board p)) (opposite side)) getAvailablePlaces board side
+
+alphaBetaEvaluate :: BoardNode -> Depth -> (Float, Float) -> MinMaxPhase -> Float
+alphaBetaEvaluate (BoardNode board side) 0 (alpha, beta) minmax = do
+    if minmax == Max
+        then evaluateBoard board side
+        else evaluateBoard board (opposite side)
+
+alphaBetaEvaluate node@(BoardNode board side) depth (alpha, beta) minmax = do
+    let children = getChildNodes node

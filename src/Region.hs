@@ -5,6 +5,7 @@ import Data.List
 data RegionType = Undefined | RegionType PlaceData deriving (Eq, Show)
 
 type Region = [Place]
+type CapturedAmount = Int
 
 getUniformRegions :: Board -> [Region]
 getUniformRegions board = getUniformRegions' board (0,0) []
@@ -85,3 +86,34 @@ getScore board side = do
             getBorderType board r == RegionType (Stone side))
                 $ getUniformRegions board
     sum $ map length controlledPlaces
+
+
+placeStone :: Board -> Place -> Side -> (Board, CapturedAmount)
+placeStone board place side = do
+    let newBoard = addStoneToBoard board place side
+    removeCaptured newBoard place side
+
+{- Removes captured regions that are connected to given place -}
+removeCaptured :: Board -> Place -> Side -> (Board, CapturedAmount)
+removeCaptured board place side = do
+   let places = filter (\p -> dataAtPlace board p == (Stone (opposite side))) $ getAdjacentPlaces board place
+   let adjacentRegions = foldl (\regs p -> do
+         let newReg = getUniformRegion board p
+         if elem newReg regs
+            then regs
+            else newReg : regs
+         ) [] places
+   let capturedRegions = filter (isDead board) adjacentRegions
+   let points = sum $ map length capturedRegions
+   let board' = foldl (\b r -> setRegionContent b r Empty) board capturedRegions
+   (board', points)
+
+isSuicide :: Board -> Place -> Side -> Bool
+isSuicide board place side = do
+    let (newBoard, _) = placeStone board place side
+    isDead newBoard (getUniformRegion newBoard place)
+
+getAvailablePlaces :: Board -> Side -> [Places]
+getAvailablePlaces board side = filter (\p -> isSuicide board p side /= True) $
+                filter (\p -> dataAtPlace board p == Empty) $
+                    (,) <$> [0..(rowCount board - 1)] <*> [0..(columnCount board - 1)]
