@@ -7,7 +7,7 @@ import Player
 import Region
 
 data GameState = GameState { board :: Board
-   , boardHistory :: [Board]
+   , prevBoard :: Board
    , playerInTurn :: Player
    , otherPlayer :: Player
    , gameOver :: Bool
@@ -16,7 +16,7 @@ data GameState = GameState { board :: Board
 initialState :: BoardDimensions -> (PlayerType, PlayerType) -> GameState
 initialState boardDimensions ptypes = do
     GameState { board = emptyBoard boardDimensions
-        , boardHistory = []
+        , prevBoard = emptyBoard boardDimensions
         , playerInTurn = Player (fst ptypes) Black 0 False False 0
         , otherPlayer = Player (snd ptypes) White 0 False False 0
         , gameOver = False
@@ -26,7 +26,7 @@ sideInTurn :: GameState -> Side
 sideInTurn state = playerSide (playerInTurn state)
 
 passIsAvailable :: GameState -> Bool
-passIsAvailable state@(GameState board boardHistory playerInTurn otherPlayer gameOver) = do
+passIsAvailable state@(GameState board prevBoard playerInTurn otherPlayer gameOver) = do
    if (hasFinished otherPlayer || hasPassed playerInTurn) then False else True
 
 moveIsValid :: GameState -> Move -> Bool
@@ -39,46 +39,46 @@ moveIsValid state move@(Move StonePlacing place) = do
          placeIsValid (board state) place &&
             dataAtPlace (board state) place == Empty &&
             isSuicide (board state) place (sideInTurn state) /= True &&
-            not (length (boardHistory state) >= 2 &&
-            (boardHistory state) !! 0 == board (executeMove state move))
+            (prevBoard state) == fst ( placeStone (board state) place (sideInTurn state))
 
 
 {- Move MUST be checked to be valid before executing it! -}
 executeMove :: GameState -> Move -> GameState
-executeMove state@(GameState board boardHistory playerInTurn otherPlayer gameOver) (Move moveType movePlace) = do
+executeMove state@(GameState board prevBoard playerInTurn otherPlayer gameOver) (Move moveType movePlace) = do
       case moveType of
          Passing -> do
             let newOtherPlayer = (Player (playerType playerInTurn) (playerSide playerInTurn) (captured playerInTurn) True False 0)
-            GameState board boardHistory otherPlayer newOtherPlayer gameOver
+            GameState board prevBoard otherPlayer newOtherPlayer gameOver
 
          Finishing -> do
             if (hasFinished otherPlayer)
             then do
                   let p1 = Player (playerType playerInTurn) (playerSide playerInTurn) (captured playerInTurn) True True (captured playerInTurn + (getScore board (playerSide playerInTurn)))
                   let p2 = Player (playerType otherPlayer) (playerSide otherPlayer) (captured otherPlayer) True True (captured otherPlayer + (getScore board (playerSide otherPlayer)))
-                  GameState board boardHistory p1 p2 True
+                  GameState board prevBoard p1 p2 True
             else do
                   let newOtherPlayer = Player (playerType playerInTurn) (playerSide playerInTurn) (captured playerInTurn) True True 0
                   let newPlayerInTurn = Player (playerType otherPlayer) (playerSide otherPlayer) (captured otherPlayer) True True (captured otherPlayer + (getScore board (playerSide otherPlayer)))
-                  GameState board boardHistory otherPlayer newOtherPlayer gameOver
+                  GameState board prevBoard otherPlayer newOtherPlayer gameOver
 
          StonePlacing -> do
-            let newHistory = board : boardHistory
-            let (newBoard, capturedAmount) = placeStone newBoard movePlace (sideInTurn state)
+            let (newBoard, capturedAmount) = placeStone board movePlace (sideInTurn state)
             let newPlayerInTurn = otherPlayer
             let newOtherPlayer = (Player (playerType playerInTurn) (playerSide playerInTurn) (captured playerInTurn + capturedAmount) False False 0)
-            GameState newBoard newHistory newPlayerInTurn newOtherPlayer False
+            GameState newBoard board newPlayerInTurn newOtherPlayer False
 
 chooseValidMove :: GameState -> Move
-chooseValidMove state = chooseValidMove' state 10
+chooseValidMove state = chooseValidMove' state 1
 
 chooseValidMove' :: GameState -> Int -> Move
-chooseValidMove' state 0 = Move Finishing (0,0)
 chooseValidMove' state triesLeft = do
-    let move = chooseMove (playerInTurn state) (board state) (passIsAvailable state)
-    if (moveIsValid state move)
-        then move
-        else chooseValidMove' state (triesLeft - 1)
-        
+    case triesLeft of
+        tl | tl > 0 -> do
+            let move = chooseMove (playerInTurn state) (board state) (passIsAvailable state)
+            if (moveIsValid state move)
+                then move
+                else chooseValidMove' state (triesLeft - 1)
+        tl -> Move Finishing (0,0)
+                
 executeAITurn :: GameState -> GameState
 executeAITurn state = executeMove state $ chooseValidMove state

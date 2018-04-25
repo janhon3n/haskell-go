@@ -62,16 +62,16 @@ placeIsValid board place = if fst place >= length board || fst place < 0 || snd 
 
 {- TODO Add a PlaceData to the board for position Place -}
 addStoneToBoard :: Board -> Place -> Side -> Board
-addStoneToBoard board place side = do
-    if(not (placeIsValid board place) || (dataAtPlace board place /= Empty))
-        then board
-        else setDataAtPlace board place (Stone side)
+addStoneToBoard board place side = setDataAtPlace board place (Stone side)
+
+replaceNth :: Int -> a -> [a] -> [a]
+replaceNth n newValue (x:xs) =
+        if n == 0 
+            then newValue : xs
+            else x:replaceNth (n-1) newValue xs
 
 setDataAtPlace :: Board -> Place -> PlaceData -> Board
-setDataAtPlace board place placeData = do
-    if(placeIsValid board place)
-        then map (\(rowIndex, row) -> map (\(columnIndex, dataa) -> if (rowIndex, columnIndex) == place then placeData else dataa) (zip [0..] row)) (zip [0..] board)
-        else board
+setDataAtPlace board place placeData = replaceNth (fst place) (replaceNth (snd place) placeData (board !! (fst place))) board
     
 nextPlace :: Board -> Place -> Place
 nextPlace board place = do

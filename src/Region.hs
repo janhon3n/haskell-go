@@ -33,19 +33,14 @@ getRegionType board region = do
         else RegionType (dataTypes !! 0)
 
 getUniformRegion :: Board -> Place -> Region
-getUniformRegion board place = findUniformRegion board [] place
+getUniformRegion board place = findUniformRegion board [] [place] $ dataAtPlace board place
 
-findUniformRegion :: Board -> Region -> Place -> Region
-findUniformRegion board [] place = do
-    let region = [place]
-    foldl (findUniformRegion board) region (getAdjacentPlaces board place)
-
-findUniformRegion board region place = do
-    if (RegionType (dataAtPlace board place) == (getRegionType board region) && placeIsInRegion region place /= True)
-        then do
-            let updatedRegion = region ++ [place]
-            foldl (findUniformRegion board) updatedRegion (getAdjacentPlaces board place)
-        else region
+findUniformRegion :: Board -> Region -> [Place] -> PlaceData -> Region
+findUniformRegion board foundRegion [] placeData = foundRegion
+findUniformRegion board foundRegion (placeToCheck:places) placeData =
+        if dataAtPlace board placeToCheck == placeData
+            then findUniformRegion board (placeToCheck:foundRegion) (places ++ (getAdjacentPlaces board placeToCheck)) placeData
+            else findUniformRegion board foundRegion places placeData
 
 getBorderType :: Board -> Region -> RegionType
 getBorderType board region = getRegionType board $ getBorderRegion board region
@@ -93,27 +88,27 @@ placeStone board place side = do
     let newBoard = addStoneToBoard board place side
     removeCaptured newBoard place side
 
+getCapturedRegion :: Board -> Place -> Side -> Region
+getCapturedRegion board place side = foldl (\reg p ->
+        if elem p reg || dataAtPlace board p /= Stone (opposite side)
+            then reg
+            else do
+                let newReg = (getUniformRegion board p)
+                if isDead board newReg then union reg newReg else reg)
+            [] $ getAdjacentPlaces board place
+
 {- Removes captured regions that are connected to given place -}
 removeCaptured :: Board -> Place -> Side -> (Board, CapturedAmount)
 removeCaptured board place side = do
-   let places = filter (\p -> dataAtPlace board p == (Stone (opposite side))) $ getAdjacentPlaces board place
-   let adjacentRegions = foldl (\regs p -> do
-         let newReg = getUniformRegion board p
-         if elem newReg regs
-            then regs
-            else newReg : regs
-         ) [] places
-   let capturedRegions = filter (isDead board) adjacentRegions
-   let points = sum $ map length capturedRegions
-   let board' = foldl (\b r -> setRegionContent b r Empty) board capturedRegions
-   (board', points)
+    let captured = getCapturedRegion board place side
+    (setRegionContent board captured Empty, length captured)
 
 isSuicide :: Board -> Place -> Side -> Bool
 isSuicide board place side = do
     let (newBoard, _) = placeStone board place side
     isDead newBoard (getUniformRegion newBoard place)
 
-getAvailablePlaces :: Board -> Side -> [Places]
+getAvailablePlaces :: Board -> Side -> [Place]
 getAvailablePlaces board side = filter (\p -> isSuicide board p side /= True) $
                 filter (\p -> dataAtPlace board p == Empty) $
-                    (,) <$> [0..(rowCount board - 1)] <*> [0..(columnCount board - 1)]
+                    (,) <$> [0..(rowCount board - 1)] <*> [0..(columnCount board - 1)] 

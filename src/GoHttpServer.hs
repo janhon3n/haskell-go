@@ -80,7 +80,6 @@ handleNewGame = do
       let boardDimensions = ((boardSize newGameData), (boardSize newGameData))
       ok $ toResponse $ encode (initialState boardDimensions (playerTypes newGameData))
 
-
 handleGameTurn :: ServerPart Response
 handleGameTurn = do
       body <- getBody

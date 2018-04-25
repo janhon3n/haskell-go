@@ -1,2 +1,4 @@
+import GoHttpServer
+
 main :: IO ()
-main = putStrLn "Test suite not yet implemented"
+main = startServer
