@@ -1,7 +1,7 @@
 module Main where
-import Go
+import GoHttpServer
 
 main :: IO ()
 main = do
-    result <- playGame
+    startServer
     return ()

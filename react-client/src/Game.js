@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import "./Game.css";
 import Board from "./Board";
 import Bowl from "./Bowl";
-import ActionMenu from "./ActionMenu"
-import EndMenu from "./EndMenu"
+import ActionMenu from "./ActionMenu";
+import EndMenu from "./EndMenu";
 
 class Game extends Component {
   constructor(props) {
@@ -44,8 +44,7 @@ class Game extends Component {
     let response = await fetch("/newgame", {
       method: "post",
       body: JSON.stringify({
-        boardSize: this.props.boardSize,
-        playerTypes: this.props.playerTypes
+        boardSize: this.props.boardSize
       })
     });
     this.updateGameState(await response.json());
@@ -104,8 +103,8 @@ class Game extends Component {
     if (this.state.screenSize.width / 5 < this.state.screenSize.height / 3) {
       boardSize = this.state.screenSize.width * 0.8 * 3 / 5;
     }
-    let bowlSize = boardSize / 3
-    let textSize = bowlSize / 9
+    let bowlSize = boardSize / 3;
+    let textSize = bowlSize / 9;
 
     let blackPlayer =
       this.state.gameState.playerInTurn.playerSide === "Black"
@@ -136,6 +135,11 @@ class Game extends Component {
               stoneCount={whitePlayer.captured}
               size={bowlSize}
             />
+            {this.state.gameState.playerInTurn.playerSide == "White" && !this.state.gameState.gameOver && (
+              <h2 style={{
+                fontSize:textSize*1.5
+              }}>White's turn</h2>
+            )}
             {!this.state.gameState.gameOver ? (
               <ActionMenu
                 passAvailable={whitePlayer.passAvailable}
@@ -148,10 +152,10 @@ class Game extends Component {
               />
             ) : (
               <EndMenu
-              size={textSize}
-              score={whitePlayer.finalScore}
-              onExit={this.props.onEnd}
-            />
+                size={textSize}
+                score={whitePlayer.finalScore}
+                onExit={this.props.onEnd}
+              />
             )}
           </div>
           <Board
@@ -176,6 +180,14 @@ class Game extends Component {
                 score={blackPlayer.finalScore}
                 onExit={this.props.onEnd}
               />
+            )}
+            {this.state.gameState.playerInTurn.playerSide == "Black" && !this.state.gameState.gameOver && (
+              <h2 style={{
+                fontSize:textSize*1.5,
+                color: 'black',
+                fontWeight:'bold',
+                textShadow: textSize*0.02+"px 0px "+ textSize*0.1+"px #666",
+              }}>Black's turn</h2>
             )}
             <Bowl
               side="white"

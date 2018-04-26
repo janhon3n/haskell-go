@@ -41,18 +41,18 @@ executeMove :: GameState -> Move -> GameState
 executeMove state@(GameState board boardHistory playerInTurn otherPlayer gameOver) (Move moveType movePlace) = do
       case moveType of
          Passing -> do
-            let newOtherPlayer = (Player (playerType playerInTurn) (playerSide playerInTurn) (captured playerInTurn) True False 0)
+            let newOtherPlayer = (Player (playerSide playerInTurn) (captured playerInTurn) True False 0)
             GameState board boardHistory otherPlayer newOtherPlayer gameOver
 
          Finishing -> do
             if (hasFinished otherPlayer)
             then do
-                  let p1 = Player (playerType playerInTurn) (playerSide playerInTurn) (captured playerInTurn) True True (captured playerInTurn + (getScore board (playerSide playerInTurn)))
-                  let p2 = Player (playerType otherPlayer) (playerSide otherPlayer) (captured otherPlayer) True True (captured otherPlayer + (getScore board (playerSide otherPlayer)))
+                  let p1 = Player (playerSide playerInTurn) (captured playerInTurn) True True (captured playerInTurn + (getScore board (playerSide playerInTurn)))
+                  let p2 = Player (playerSide otherPlayer) (captured otherPlayer) True True (captured otherPlayer + (getScore board (playerSide otherPlayer)))
                   GameState board boardHistory p1 p2 True
             else do
-                  let newOtherPlayer = Player (playerType playerInTurn) (playerSide playerInTurn) (captured playerInTurn) True True 0
-                  let newPlayerInTurn = Player (playerType otherPlayer) (playerSide otherPlayer) (captured otherPlayer) True True (captured otherPlayer + (getScore board (playerSide otherPlayer)))
+                  let newOtherPlayer = Player (playerSide playerInTurn) (captured playerInTurn) True True 0
+                  let newPlayerInTurn = Player (playerSide otherPlayer) (captured otherPlayer) True True (captured otherPlayer + (getScore board (playerSide otherPlayer)))
                   GameState board boardHistory otherPlayer newOtherPlayer gameOver
 
          StonePlacing -> do
@@ -60,7 +60,7 @@ executeMove state@(GameState board boardHistory playerInTurn otherPlayer gameOve
             let newBoard = addStoneToBoard board movePlace (sideInTurn state)
             let (newBoard', capturedAmount) = removeCaptured newBoard movePlace (sideInTurn state)
             let newPlayerInTurn = otherPlayer
-            let newOtherPlayer = (Player (playerType playerInTurn) (playerSide playerInTurn) (captured playerInTurn + capturedAmount) False False 0)
+            let newOtherPlayer = (Player (playerSide playerInTurn) (captured playerInTurn + capturedAmount) False False 0)
             GameState newBoard' newHistory newPlayerInTurn newOtherPlayer False
 
 removeCaptured :: Board -> Place -> Side -> (Board, Int)

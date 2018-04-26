@@ -51,10 +51,10 @@
   box-shadow:0px 0px 5px white;
 }
 
-.black {
+div.black {
   background-image: url("/stone_black.svg")
 }
 
-.white {
+div.white {
   background-image: url("/stone_white.svg")
 }

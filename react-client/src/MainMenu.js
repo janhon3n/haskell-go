@@ -3,7 +3,7 @@ import "./MainMenu.css";
 
 export default class MainMenu extends Component {
   boardSizes = [9, 13, 19]
-  possiblePlayerTypes = [["Human", "Human"], ["Human", "RandomAI"], ["Human", "TreeAI"]]
+  possiblePlayerTypes = [["Human", "Human"]]
 
   render() {
     return (

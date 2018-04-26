@@ -12,12 +12,12 @@ data GameState = GameState { board :: Board
    , gameOver :: Bool
    } deriving (Eq, Show, Generic)
 
-initialState :: BoardDimensions -> (PlayerType, PlayerType) -> GameState
-initialState boardDimensions ptypes = do
+initialState :: BoardDimensions -> GameState
+initialState boardDimensions = do
     GameState { board = emptyBoard boardDimensions
         , boardHistory = []
-        , playerInTurn = Player (fst ptypes) Black 0 False False 0
-        , otherPlayer = Player (snd ptypes) White 0 False False 0
+        , playerInTurn = Player Black 0 False False 0
+        , otherPlayer = Player White 0 False False 0
         , gameOver = False
     }
     

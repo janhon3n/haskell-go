@@ -1,7 +1,6 @@
 {-# LANGUAGE OverloadedStrings, DeriveGeneric #-}
 
 module GoHttpServer where
-import Go
 import Board
 import GameState
 import Move
@@ -25,8 +24,6 @@ instance FromJSON Move
 instance ToJSON Move
 instance FromJSON PlaceData
 instance ToJSON PlaceData
-instance FromJSON PlayerType
-instance ToJSON PlayerType
 instance FromJSON Player
 instance ToJSON Player
 instance FromJSON GameState
@@ -39,7 +36,7 @@ data JSONMove = JSONMove { gameState :: GameState
 instance FromJSON JSONMove
 instance ToJSON JSONMove
 
-data JSONNewGame = JSONNewGame { boardSize :: Int, playerTypes :: (PlayerType, PlayerType)} deriving (Show, Eq, Generic)
+data JSONNewGame = JSONNewGame { boardSize :: Int } deriving (Show, Eq, Generic)
 
 
 instance FromJSON JSONNewGame
@@ -63,7 +60,7 @@ handlers = do
       decodeBody bodyPolicy
       msum [ dir "game" $ do
                   method GET
-                  ok $ toResponse $ encode (initialState (13,13) (Human, Human))
+                  ok $ toResponse $ encode (initialState (9,9))
             , dir "game" $ do
                   method POST
                   handleGameTurn
@@ -80,7 +77,7 @@ handleNewGame = do
       body <- getBody
       let newGameData = fromJust $ decode body :: JSONNewGame
       let boardDimensions = ((boardSize newGameData), (boardSize newGameData))
-      ok $ toResponse $ encode (initialState boardDimensions (playerTypes newGameData))
+      ok $ toResponse $ encode (initialState boardDimensions)
 
 
 handleGameTurn :: ServerPart Response
@@ -90,11 +87,7 @@ handleGameTurn = do
       if moveIsValid (gameState gameData) (move gameData)
             then do
                   let newGameState = executeMove (gameState gameData) (move gameData)
-                  if playerType (playerInTurn newGameState) /= Human
-                        then do
-                              let aiMove = chooseValidMove newGameState
-                              ok $ toResponse $ encode $ executeMove newGameState aiMove
-                        else ok $ toResponse $ encode newGameState
+                  ok $ toResponse $ encode newGameState
             else noContent $ toResponse ("Invalid move" :: String)
 
 getBody :: ServerPart L.ByteString
