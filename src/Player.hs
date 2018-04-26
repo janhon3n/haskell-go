@@ -32,8 +32,7 @@ chooseMove player@(Player playerType playerSide captured hasPassed hasFinished f
         RandomAI -> Move Passing (0,0)
 
         TreeAI -> do
-            let place = chooseBestPlaceWithAlphaBetaSearch board playerSide 0
-            case place of
+            case chooseBestPlaceWithAlphaBetaSearch board playerSide 0 of
                 Nothing -> Move Finishing (0,0)
                 Just p -> Move StonePlacing p
 
@@ -53,8 +52,7 @@ chooseBestPlaceWithAlphaBetaSearch board side depth = do
         [] -> Nothing
         (place:tail) -> do
             let evalFunc = (\p -> alphaBetaEvaluate (BoardNode (fst (placeStone board p side)) side) depth (0,0) Min)
-            let placeValue = evalFunc place
-            Just $ selectBestPlace tail place placeValue evalFunc
+            Just $ selectBestPlace tail place (evalFunc place) evalFunc
 
 selectBestPlace :: [Place] -> Place -> Double -> (Place -> Double) -> Place
 selectBestPlace [] bestPlace currentBestValue evalFunc = bestPlace
@@ -77,10 +75,9 @@ alphaBetaEvaluate node@(BoardNode board side) depth (alpha, beta) minmax = case 
 
 getChildNodes :: BoardNode -> Int -> [BoardNode]
 getChildNodes node@(BoardNode board side) count = do
-    let places = getAvailablePlaces board side
-    if (length places == 0)
-        then []
-        else map (\p -> BoardNode (fst (placeStone board p side)) (opposite side)) $ selectEvenly places count
+    case getAvailablePlaces board side of
+        [] -> []
+        places -> map (\p -> BoardNode (fst (placeStone board p side)) (opposite side)) $ selectEvenly places count
 
 evaluateBoard :: Board -> Side -> Double
 evaluateBoard board side = do

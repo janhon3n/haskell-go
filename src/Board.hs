@@ -12,17 +12,8 @@ opposite White = Black
 {- Place = paikan koordinaatit laudalla (rivi, sarake) -}
 type Place = (Int, Int)
 
-leftOf :: Place -> Place
-leftOf place = (fst place, snd place - 1)
-rightOf :: Place -> Place
-rightOf place = (fst place, snd place + 1)
-upOf :: Place -> Place
-upOf place = (fst place - 1, snd place)
-downOf :: Place -> Place
-downOf place = (fst place + 1, snd place)
-
 getAdjacentPlaces :: Board -> Place -> [Place]
-getAdjacentPlaces board place = filter (placeIsValid board) [downOf place, upOf place, leftOf place, rightOf place]
+getAdjacentPlaces board (row,col) = filter (placeIsValid board) [(row+1, col), (row-1, col), (row, col+1), (row, col-1)]
 
 {- PlaceData = paikan sisältö (tyhjä, musta tai valkoinen -}
 data PlaceData = Empty | Stone {
@@ -56,9 +47,12 @@ dataAtPlace board place = board !! (fst place) !! (snd place)
 {- Returns true if place is inside the board -}
 placeIsValid :: Board -> Place -> Bool
 placeIsValid [] _ = False
-placeIsValid board place = if fst place >= length board || fst place < 0 || snd place >= length (board !! 0) || snd place < 0
-    then False
-    else True
+placeIsValid board place = case place of
+    (row, col) | row < 0 -> False
+    (row, col) | col < 0 -> False
+    (row, col) | row >= length board -> False
+    (row, col) | col >= length (board !! 0) -> False
+    _ -> True
 
 {- TODO Add a PlaceData to the board for position Place -}
 addStoneToBoard :: Board -> Place -> Side -> Board
