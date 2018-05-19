@@ -61,8 +61,8 @@ replaceNth n newValue (x:xs) = case n of
 setDataAtPlace :: Board -> Place -> PlaceData -> Board
 setDataAtPlace board (row, col) placeData = replaceNth row (replaceNth col placeData (board !! row)) board
 
-nextPlace :: Board -> Place -> Place
+nextPlace :: Board -> Place -> Maybe Place
 nextPlace board place = case place of
-    (row, col) | col == (columnCount board) - 1 && row == (rowCount board) - 1 -> (0,0)
-    (row, col) | col == (columnCount board) - 1 -> (row+1, 0)
-    (row, col) -> (row, col+1)
+    (row, col) | col == (columnCount board) - 1 && row == (rowCount board) - 1 -> Nothing
+    (row, col) | col == (columnCount board) - 1 -> Just (row+1, 0)
+    (row, col) -> Just (row, col+1)

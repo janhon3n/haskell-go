@@ -4,7 +4,6 @@ module GoHttpServer where
 import Board
 import GameState
 import Move
-import Player
 
 import Data.Maybe
 import Data.Aeson
@@ -79,16 +78,15 @@ handleNewGame = do
       let boardDimensions = ((boardSize newGameData), (boardSize newGameData))
       ok $ toResponse $ encode (initialState boardDimensions)
 
-
 handleGameTurn :: ServerPart Response
 handleGameTurn = do
       body <- getBody
       let gameData = fromJust $ decode body :: JSONMove
-      if moveIsValid (gameState gameData) (move gameData)
-            then do
+      case moveIsValid (gameState gameData) (move gameData) of
+            False -> noContent $ toResponse ("Invalid move" :: String)
+            True -> do
                   let newGameState = executeMove (gameState gameData) (move gameData)
                   ok $ toResponse $ encode newGameState
-            else noContent $ toResponse ("Invalid move" :: String)
 
 getBody :: ServerPart L.ByteString
 getBody = do

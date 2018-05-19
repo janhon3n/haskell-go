@@ -3,19 +3,25 @@
 module GameState where
 import GHC.Generics
 import Board
-import Player
+
+data Player = Player { playerSide :: Side
+    , captured :: Int
+    , hasPassed :: Bool
+    , hasFinished :: Bool
+    , finalScore :: Int
+ } deriving (Eq, Show, Generic)
 
 data GameState = GameState { board :: Board
-   , boardHistory :: [Board]
-   , playerInTurn :: Player
-   , otherPlayer :: Player
-   , gameOver :: Bool
-   } deriving (Eq, Show, Generic)
+    , prevBoard :: Board
+    , playerInTurn :: Player
+    , otherPlayer :: Player
+    , gameOver :: Bool
+    } deriving (Eq, Show, Generic)
 
 initialState :: BoardDimensions -> GameState
 initialState boardDimensions = do
     GameState { board = emptyBoard boardDimensions
-        , boardHistory = []
+        , prevBoard = emptyBoard boardDimensions
         , playerInTurn = Player Black 0 False False 0
         , otherPlayer = Player White 0 False False 0
         , gameOver = False
