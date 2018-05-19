@@ -4,7 +4,7 @@ export default class ActionMenu extends Component {
   render() {
     if (!this.props.active) return <div />;
     return (
-      <div className="ActionMenu"
+      <div className={"ActionMenu "+this.props.color+"Text"}
         style={{
           fontSize: this.props.size + "px"
         }}

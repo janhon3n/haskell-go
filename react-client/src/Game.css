@@ -29,3 +29,8 @@ button {
   font-family: inherit;
   border:none;
 }
+.blackText, .blackText button, .blackText div {
+  color: black;
+  font-weight:bold;
+  text-shadow: 2px 0px 0px #666;
+}

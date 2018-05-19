@@ -56,6 +56,7 @@ class Game extends Component {
 
   async sendMove(move) {
     try {
+      console.log(move)
       this.setState({ postInProgress: true });
       let response = await fetch("/game", {
         method: "post",
@@ -132,10 +133,12 @@ class Game extends Component {
           <div className="sideMenu">
             <Bowl
               side="black"
+              color="white"
               stoneCount={whitePlayer.captured}
               size={bowlSize}
             />
-            {this.state.gameState.playerInTurn.playerSide == "White" && !this.state.gameState.gameOver && (
+            {this.state.gameState.playerInTurn.playerSide == "White" &&
+              !this.state.gameState.gameOver && (
               <h2 style={{
                 fontSize:textSize*1.5
               }}>White's turn</h2>
@@ -148,10 +151,12 @@ class Game extends Component {
                 active={
                   this.state.gameState.playerInTurn.playerSide === "White"
                 }
+                color='white'
                 size={textSize}
               />
             ) : (
               <EndMenu
+                color='white'
                 size={textSize}
                 score={whitePlayer.finalScore}
                 onExit={this.props.onEnd}
@@ -172,25 +177,26 @@ class Game extends Component {
                 active={
                   this.state.gameState.playerInTurn.playerSide === "Black"
                 }
+                color='black'
                 size={textSize}
               />
             ) : (
               <EndMenu
+                color='black'
                 size={textSize}
                 score={blackPlayer.finalScore}
                 onExit={this.props.onEnd}
               />
             )}
-            {this.state.gameState.playerInTurn.playerSide == "Black" && !this.state.gameState.gameOver && (
-              <h2 style={{
+            {this.state.gameState.playerInTurn.playerSide == "Black" &&
+              !this.state.gameState.gameOver && (
+              <h2 className='blackText' style={{
                 fontSize:textSize*1.5,
-                color: 'black',
-                fontWeight:'bold',
-                textShadow: textSize*0.02+"px 0px "+ textSize*0.1+"px #666",
               }}>Black's turn</h2>
             )}
             <Bowl
               side="white"
+              color="black"
               stoneCount={blackPlayer.captured}
               size={bowlSize}
               align="end"

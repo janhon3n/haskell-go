@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export default class EndMenu extends Component {
    render() {
       return (
-         <div className="EndMenu"
+         <div className={"EndMenu "+this.props.color+"Text"}
            style={{
              fontSize: this.props.size + "px"
            }}

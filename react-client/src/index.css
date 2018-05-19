@@ -4,7 +4,7 @@ body {
   width:100vw;
   margin: 0;
   padding: 0;
-  background: linear-gradient(bottom, rgb(5, 73, 5), rgb(6, 54, 20));
+  background: linear-gradient(left, rgb(9, 54, 9), rgb(55, 109, 36));
   display:flex;
   justify-content: center;
   box-sizing: border-box;

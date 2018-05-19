@@ -38,7 +38,7 @@ export default class Bowl extends Component {
             );
           })}
         </div>
-        <div className="countLable" style={{
+        <div className={"countLable " + this.props.color+"Text"} style={{
           fontSize: this.props.size / 6 + 'px',
         }}>{this.props.stoneCount}</div>
       </div>
