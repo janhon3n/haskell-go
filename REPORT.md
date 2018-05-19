@@ -5,7 +5,7 @@ Harjoitustyöksi toteutimme Go lautapelin. Toiminnallisuus (Back end) on toteute
 
 # Funktionaalinen paradigma
 ## Paradigman esittely
-Funktinaalisuudella tarkoitetaan yleensä sitä, että funktioden käsittely on saman kaltaista kuin muidenkin tietorakenteiden. Funktioita voidaan antaa muihin funktioihin argumenteiksi ja niitä voidaan palauttaa kutsun lopuksi. Funktiota voidaan yleensä myös tallentaa esimerkiksi tietokantoihin. 
+Funktinaalisuudella tarkoitetaan sitä, että funktioden käsittely on saman kaltaista kuin muidenkin tietorakenteiden. Funktioita voidaan antaa muihin funktioihin argumenteiksi ja niitä voidaan palauttaa kutsun lopuksi. Funktiota voidaan yleensä myös tallentaa esimerkiksi tietokantoihin. 
 
 Funktionaalisuus mahdollistaa korkeampiasteisten funktioiden luomisen. Korkeamman asteen funktio on funktio, jonka argumenttina on myös funktio. Korkeamman asteen funktiot voivat helpoittaa ohjelmointia ja mahdollistavat siistimpää koodia. Esimerkiksi mappaus ja suodatus ovat yleisiä korkeamman asteen funktioita. Seuraava esimerkki on Javascriptiä.
 
@@ -61,7 +61,7 @@ Puhtaiden funktioiden käyttäytymisen helpompi ennustaminen johtaa vähempään
 
 Jos käytetään ainoastaan puhtaita funktioita, ohjelman tilaa täytyy hahmottaa eri tavalla kuin perinteisillä epäpuhtailla kielillä. Koska funktiot eivät voi muuttaa ohjelman globaalia tilaa, ohjelman suorituksen tila riippuu ainoastaa parasta aikaa suoritettavista funktioista, niiden sisäisestä tilasta ja suorituskohdasta.
 
-Puhtauden lisäksi funktiot ovat yleensä ainoastaan yhden parametrin funktioita, jotka palauttavat aina jotain. Tällöin kahden parametrin funktiot koostuvat tavallaan kahdesta funktiosta. Ylimpänä on funktio, joka ottaa parametrin ensimmäisen parametrin, ja palauttaa funktion, joka ottaa parametrikseen toisen parametrin ja palauttaa tuloksen. Funktion saama parametri on sidottu kyseisen funktion sisällä, jolloin se on sidottu myös sen palauttaman funktion sisällä. Kun usean parametrin funktioita kutsutaan, sidotaan siis parametreja niin paljon kun niitä annettiin, ja joko funktio jos parametreja on vielä jäljellä, tai tulos.
+Puhtauden lisäksi funktiot ovat yleensä ainoastaan yhden parametrin funktioita, jotka palauttavat aina jotain. Tällöin kahden parametrin funktiot koostuvat tavallaan kahdesta funktiosta. Ylimpänä on funktio, joka ottaa parametrina ensimmäisen parametrin, ja palauttaa funktion, joka ottaa parametrina toisen parametrin ja palauttaa tuloksen. Funktion saama parametri on sidottu kyseisen funktion sisällä, jolloin se on sidottu myös sen palauttaman funktion sisällä. Kun usean parametrin funktioita kutsutaan, sidotaan siis parametreja niin paljon kun niitä annettiin, ja joko funktio jos parametreja on vielä jäljellä, tai tulos jos kaikki parametrit käytettiin.
 
 ## Tyypillinen ohjelman rakenne
 Puhtailla funktionaalisilla kielillä ohjelmointi on hyvin kuvailevaa. Funktioita luodaan käyttämällä aiempia funktioita. Yleensä lopulta päädytään yhteen ylimpään funktioon, joka on lopulta koko ohjelman suoritus. Kontrollivuohon ei kiinnitetä huomiota vaan se seuraa implisiittisesti kuvatuista funktioista. Perinteisiä toistorakenteita ei voida käyttää, sillä ne vaatisivat globaalin tilan muuttamista joka kierroksella. Toisto täytyykin toteuttaa rekursiolla, jossa funktio kutsuu itseään uudella syötteellä.
@@ -69,6 +69,7 @@ Puhtailla funktionaalisilla kielillä ohjelmointi on hyvin kuvailevaa. Funktioit
 Yleensä käytetään paljon mappauksia, suodatuksia tai taittoja. Pohjimmillaan nämäkin on kuitenkin toteutettu rekursiolla. Taitot ovat listan (tai muun tietorakenteen) yli tehtäviä operaatioita, jossa annettu funktio suoritetaan ensin jollekkin alkusyötteelle ja yhdelle alkiolle, ja tämän jälkeen saatu tulos syötetään takaisin funktioon uuden alkion kanssa. Taitto ikäänkuin kerryttää tulosta tietorakenteen yli suorittaessa alkioittain.
 
 Funktioille voi myös määrittää eri sisältö niiden saaman syötteen perusteella. Esimerkiksi Haskelissa.
+
 ```Haskell
 tuplaaJosViisi 5 = 5*2
 tuplaaJosViisi i = i
@@ -105,7 +106,7 @@ GameState.hs | Luo datatyypit pelaajan datalle ja pelin tilalle.
 Move.hs | Luo datatyyppi siirrolle. Luo pelilogiikka käyttäen hyväksi edellä kuvattuja moduuleita. Sisältää funktiot siirtojen oikeellisuuden tarkastukselle (moveIsValid) ja siirtojen suorittamiselle (executeMove).
 GoHttpServer.hs | Luo Happstack kirjaston avulla HTTP palvelin. Muodosta HTTP rajapinta, jonka avulla peliä voidaan peliä. Pelin tila voidaan muuntaa JSON muotoiseksi ja data välitys HTTP:n yli on juurikin JSON muotoista.
 
-## Data tyypit
+## Laudan analysointi
 Ohjelmassa on määritelty seuraavat datatyypit ja tyyppialiakset laudan kuvaamiseksi.
 
 ```Haskell
@@ -118,8 +119,10 @@ type Board = [Row]
 data RegionType = Undefined | RegionType PlaceData deriving (Eq, Show)
 type Region = [Place]
 ```
-Lauta koostuu siis kaksiuloitteisesta listasta alkioita, joiden arvo voi olla tyhjä, valkoinen kivi tai musta kivi. Paikka on koordinaatti tiettyy laudan alkioon. 
+Lauta koostuu siis kaksiuloitteisesta listasta alkioita, joiden arvo voi olla tyhjä, valkoinen kivi tai musta kivi. Paikka on koordinaatti tiettyy laudan alkioon. Alue (Region) on lista paikkoja. Alueen tyyppi on joko määrittelemätön (jos se sisältää monta erityyppistä dataa), tai jokin paikkadatasta. Alue on erittäin kätevä abstraktio pelin logiikan toteuttamiseksi. Go lautapelissä pelaajat yrittävät vallata alueita ympäröimällä niitä oman värisillä kivillä. Ympäröimällä vastustajan yhtenäisen alueen, pelaaja vangitsee alueen kivet. Ohjelmaan on tehty funktiot yhtenäisten alueiden löytämiselle, aluetta ympäröivän reuna-alueen löytämiseksi ja alueiden tyypin määrittämiseksi. Näiden funktioiden avulla pelilogiikka voi analysoida laudan tilannetta, ja laskea pelaajien pisteet.
 
+## Pelin tila
+Pelin tilaa varten on määritelty datatyypit Player ja GameState seuraavasti.
 
 ```Haskell
 data Player = Player {
@@ -137,19 +140,59 @@ data GameState = GameState {
    otherPlayer :: Player,
    gameOver :: Bool,
 }
+```
+Player pitää sisällään tiedon tiety pelaajan puolesta, pisteistä ja siitä, onko hän viime vuorolla ohittanut vuoronsa tai halunnut lopettaa pelin.
 
-data MoveType = StonePlacing | Passing | Finishing
-data Move = Move {
-    moveType :: MoveType,
-    place :: Place
-}
+GameState puolestaan pitää sisällään se hetkisen ja edellisen laudan tilan, molempien pelaajien tilan (myös kumpi pelaaja on vuorossa) ja tiedon siitä onko peli ohi. Edellistä laudan tilaa tarvitaan siirton oikeellisuuden tarkistuksessa.
+
+Myös siirroille on määritelty datatyyppi, josta selviää siirron tyyppi (Kiven asetus, vuoron ohitus tai ilmoitus pelin lopettamista), sekä uuden kiven paikka ((0,0) jos ei väliä).
+
+## Pelilogiikka
+Pelin logiikka koostuu kahdesta funktiosta, joilla on seuraavat tyypit.
+
+```Haskell
+moveIsValid :: GameState -> Move -> Bool
+executeMove :: GameState -> Move -> GameState
 ```
 
+moveIsValid ottaa parametrina pelin tilan ja siirron ja palauttaa totuusarvon siitä, onko kyseinen siirto sallittu. Uuden kiven asettamisen oikeellisuudeksi funktio tarkistaa, että uuden kiven paikka on laudan sisällä, uusi paikka on tyhjä, uutta kiveä ei välittömästi vangita (suicide) ja että siirron jälkeinen laudan tilanne ei ole sama kuin edellinen laudan tilanne. Siirron ohittaminen on mahdollista aina kun peli ei ole ohi ja molemmat pelaajat eivät ole juuri edellisillä vuoroillaan ohittaneet siirtoa. Pelin lopettamisen ehdottaminen on mahdollista aina kun peli ei ole ohi.
+
+executeMove funktio ottaa parametreina pelin tilan ja siirron ja palauttaa uuden pelin tilan siirron suorittamisen jälkeen.
+
+Kiven asettamiseksi kivi ensin lisätään laudalle, jonka jälkeen laudalta poistetaan mahdolliset vangitut kivet, joiden määrä lisätään vuorossa olevan pelaajan pisteisiin. Vangittujen kivien löytäminen tapahtuu etsimällä asetetun kiven vieressä olevat vastustajan kivien alueet, jotka tämän jälkeen suodatetaan sen perusteella, onko niiden ympärillä jäljellä tyhjiä paikkoja.
+
+Vuoron ohituksessa vuorossa olevaan pelaajan tilaan lisätään vain tieto ohituksesta. Pelin päättymisen ehdottamisessa, tieto siitä lisätään pelaajan tilaan. Jos kuitenkin myös toinen pelaaja on jo ehdottanut lopettamista, lasketaan pelaajien pisteet laudasta ja lisätään pelaajien tietoon. Tällöin myös tieto pelin loppumisesta asetetaan pelin tilaan.
+
+Jos peliä haluttaisiin pelata esimerkiksi komentoriviltä, täytyisi peli looppi toteuttaa rekursiolla erimerkiksi seuraavasti.
+
+```Haskell
+play :: GameState -> ()
+play gameState = do
+    let move = chooseMove (playerInTurn gameState)
+    if (not $ moveIsValid gameState move)
+        then play gameState
+        else do
+            let newState = executeMove move
+            if (gameIsOver newState)
+                then ()
+                else play newState
+```
+
+Olemme kuitenkin luoneet pelille HTTP:n yli toimivan käyttöliittymän.
+
 ## HTTP palvelin
+Pelille on tehty HTTP protokollan yli toimiva rajapinta. HTTP palvelimen luomiseksi on käytetty Happstack kirjastoa. Back endillä ei ole ollenkaan omaa tilaa. HTTP palvelin ainoastaan kuuntelee pyyntöjä, ja jos saa pyynnön siirron suorittamiseksi se suorittaa pyydentyn siirron ja palauttaa uuden pelin tilan. Pelin tila on tallella ainoastaan asiakkaan selaimessa, jonka avulla se voi tehdä uusia siirtopyyntöjä.
+
+Toteutimme pelin kyseisellä tavalla, koska se tuntui todella funktionaaliselta. Palvelin on todella puhdas, koska sillä ei ole mitään tilaa. HTTP pyyntöjä voidaan pitää funktion kutsuja vastaavana. Palvelin saa parametrinä pelin tilan, ja vastaa pyyntöön uudella pelin tilalla.
+
+Palvelin jakaa React front end applikaation tietostoja staattisesti. Kaikki pyynnöt juureen ohjataan kyseiseen applikaatioon.
+
+Palvelin vastaa "/newgame" polulla tulleisiin pyyntöihin uudella pelin tilalla (tyhjä lauta). Polkuun "/game" tulleisiin POST pyyntöihin vastataan seuraavasti. Pelin tila ja siirto pyritään ensin lukemaan pyynnöstä. Jos tämä ei onnistu vastataan virheilmoituksella. Jos pelin tila ja siirto onnistutaan lukemaan, tarkistetaan siirron oikeellisuus. Jos siirto ei ole sallittu, vastataan virheilmoituksella. Jos siirto on sallittu, se suoritetaan ja vastataan uudella pelin tilalla.
 
 ## Parannettavaa
-Virheenhallinta monadeilla
+Kokemattomuuden takia funktioista tuli valitettavan sotkuisia ja vaikealukuisia. Opettelimme haskelin syntaksia ja rakenteita samalla kun toteutimme harjoitustyötä. Loppua kohden opimme käyttämään niitä paremmin hyväksi koodin selkeyttämiseksi, mutta osasta funktioita tuli silti erittän sotkuisia.
 
+Vasta harjoitustyön loppuvaiheessa tutuistuimme monadeihin. Yksi olellisesti parannettavista osa-alueista ohjelman koodissa on virheidenhallinta. Nykyisesti virheiden sattuessa operaatioita yritetään yleensä uudestaan, ilman minkäänlaista ilmoitusta virheestä. Luultavasti jos olisimme paremmin tutustuneet Maybe monadiin, olisimme voineet saada virheiden hallinnasta paremman.
 
 
 # Reaktiivinen paradigma
