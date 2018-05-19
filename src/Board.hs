@@ -49,7 +49,6 @@ placeIsValid :: Board -> Place -> Bool
 placeIsValid [] _ = False
 placeIsValid board (row, col) = not $ row >= rowCount board || row < 0 || col >= columnCount board || col < 0
 
-{- TODO Add a PlaceData to the board for position Place -}
 addStoneToBoard :: Board -> Place -> Side -> Board
 addStoneToBoard board place side = setDataAtPlace board place (Stone side)
 

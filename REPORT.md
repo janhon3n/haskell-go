@@ -47,9 +47,9 @@ var uudet = lista.map((i) => {
 ```
 
 ## Puhtaus
-Funktionaalisen kielen puhtaudella tarkoitetaan, että funktioilla ei ole sivuvaikutuksia. Sivuvaikutukset tarkoittavat sitä, että funktiot muuttavat ohjelman tilaa oman suorituksen aikana. Funktiolla voi kuitenkin olla omaa muistia ja ne voivat palauttaa jotain.
+Funktionaalisen kielen puhtaudella tarkoitetaan, että funktioilla ei ole sivuvaikutuksia. Sivuvaikutukset tarkoittavat sitä, että funktiot muuttavat ohjelman tilaa oman suorituksen aikana. Funktiolla voi kuitenkin olla omaa muistia ja ne voivat palauttaa jotain. Jos käytössä on ainoastaan puhtaita funktioita, tietorakenteet eivät voi mutatoitua vaan funktiot palauttavat aina uuden rakenteen.
 
-Funktioiden puhtaus helpottaa ohjelman tilan hallintaa. Jos funktiot eivät ole puhtaita, voivat ne muokata ohjelman tilaa, jolloin tila riippuu hyvin paljon kontrollivuosta ja siitä, missä järjestyksessä funktioita kutsutaan. Myös ohjelmoidessa voi olla rasittavaa, jos ei tiedä millä tavalla funktio muuttaa ohjelman tilaa. Esimerkiksi Javascriptissä listoille tehtävien operaatioiden käyttäytymistä voi olla vaikea muistaa.
+Ohjelmointikielen puhtaus helpottaa ohjelman tilan hallintaa. Jos funktiot eivät ole puhtaita, voivat ne muokata ohjelman tilaa, jolloin tila riippuu hyvin paljon kontrollivuosta ja siitä, missä järjestyksessä funktioita kutsutaan. Myös ohjelmoidessa voi olla rasittavaa, jos ei tiedä millä tavalla funktio muuttaa ohjelman tilaa. Esimerkiksi Javascriptissä listoille tehtävien operaatioiden käyttäytymistä voi olla vaikea muistaa.
 
 ```javascript
 let lista = [2,6,1,5,7,9,0,4]
@@ -95,7 +95,55 @@ Haskelissa voidaan muodostaa uusia algebraalisia datatyyppejä.
 
 # Back end
 ## Moduulit
-Seuraavasta taulusta näkyy ohjelmassa käytetyt moduulit ja niiden vastuut:
+Seuraavasta taulusta näkyvät ohjelmassa käytetyt moduulit ja niiden vastuut:
+
+Moduuli | Vastuu
+--------|----------------------------------------------------
+Board.hs | Luo datatyypit Side ja PlaceData, jotka kuvaavat puolta (Valkoinen/Musta) ja yhdessä ruudussa olevaa dataa. Luo tyyppi aliaksia paikalle ja laudalle. Luo funktioita laudan anaysoinnille ja manipuloinnille.
+Region.hs | Luo tyyppi alueelle (lista paikkoja) ja funktioita yhtenäisten alueiden etsimiselle, alueiden reunojen hakemiselle ja alueiden sisällön analysoimiselle ja muokkaamiselle.
+GameState.hs | Luo datatyypit pelaajan datalle ja pelin tilalle.
+Move.hs | Luo datatyyppi siirrolle. Luo pelilogiikka käyttäen hyväksi edellä kuvattuja moduuleita. Sisältää funktiot siirtojen oikeellisuuden tarkastukselle (moveIsValid) ja siirtojen suorittamiselle (executeMove).
+GoHttpServer.hs | Luo Happstack kirjaston avulla HTTP palvelin. Muodosta HTTP rajapinta, jonka avulla peliä voidaan peliä. Pelin tila voidaan muuntaa JSON muotoiseksi ja data välitys HTTP:n yli on juurikin JSON muotoista.
+
+## Data tyypit
+Ohjelmassa on määritelty seuraavat datatyypit ja tyyppialiakset laudan kuvaamiseksi.
+
+```Haskell
+data Side = Black | White
+data PlaceData = Empty | Stone { side :: Side }
+type Place = (Int, Int)
+type Row = [PlaceData]
+type Board = [Row]
+
+data RegionType = Undefined | RegionType PlaceData deriving (Eq, Show)
+type Region = [Place]
+```
+Lauta koostuu siis kaksiuloitteisesta listasta alkioita, joiden arvo voi olla tyhjä, valkoinen kivi tai musta kivi. Paikka on koordinaatti tiettyy laudan alkioon. 
+
+
+```Haskell
+data Player = Player {
+   playerSide :: Side,
+   captured :: Int,
+   hasPassed :: Bool,
+   hasFinished :: Bool,
+   finalScore :: Int
+}
+
+data GameState = GameState {
+   board :: Board,
+   prevBoard :: Board,
+   playerInTurn :: Player,
+   otherPlayer :: Player,
+   gameOver :: Bool,
+}
+
+data MoveType = StonePlacing | Passing | Finishing
+data Move = Move {
+    moveType :: MoveType,
+    place :: Place
+}
+```
 
 ## HTTP palvelin
 
