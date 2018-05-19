@@ -9,13 +9,12 @@ type Region = [Place]
 getUniformRegions :: Board -> [Region]
 getUniformRegions board = getUniformRegions' board (0,0) []
 
-getUniformRegions' :: Board -> Place -> [Region] -> [Region]
-getUniformRegions' board place foundRegions = do
-    if placeIsValid board place /= True
-        then foundRegions
-        else if length (filter (\r -> elem place r) foundRegions) == 0
-            then getUniformRegions' board (nextPlace board place) ((getUniformRegion board place) : foundRegions)
-            else getUniformRegions' board (nextPlace board place) foundRegions
+getUniformRegions' :: Board -> Region -> [Place] -> PlaceData -> Region
+getUniformRegions' board foundRegion [] placeData = foundRegion
+getUniformRegions' board foundRegion (placeToCheck:places) placeData =
+        if dataAtPlace board placeToCheck == placeData
+            then getUniformRegions' board (placeToCheck:foundRegion) (places ++ (getAdjacentPlaces board placeToCheck)) placeData
+            else getUniformRegions' board foundRegion places placeData
 
 placeIsInRegion :: Region -> Place -> Bool
 placeIsInRegion region place = elem place region
@@ -57,6 +56,3 @@ getBorderRegion' board region regionToCheck@(place:restOfRegion) = do
 
 fillRegion :: Board -> Region -> PlaceData -> Board
 fillRegion board region dat = foldl (\b p -> setDataAtPlace b p dat) board region
-
-getScore :: Board -> Side -> Int
-getScore board side = 25

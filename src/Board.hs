@@ -54,10 +54,9 @@ addStoneToBoard :: Board -> Place -> Side -> Board
 addStoneToBoard board place side = setDataAtPlace board place (Stone side)
 
 replaceNth :: Int -> a -> [a] -> [a]
-replaceNth n newValue (x:xs) =
-        if n == 0 
-            then newValue : xs
-            else x:replaceNth (n-1) newValue xs
+replaceNth n newValue (x:xs) = case n of
+    0 -> newValue : xs
+    _ -> x:replaceNth (n-1) newValue xs
 
 setDataAtPlace :: Board -> Place -> PlaceData -> Board
 setDataAtPlace board (row, col) placeData = replaceNth row (replaceNth col placeData (board !! row)) board
