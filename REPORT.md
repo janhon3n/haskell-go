@@ -83,15 +83,18 @@ Funktionaaliset kielet ovat usein vahvasti tyypitettyjä. Tämä tarkoittaa ylee
 Usein voidaan määrittää omia algebraalisia datatyyppejä, joiden arvoalueet voidaan määrittää itse, ja uusia tyyppejä voidaan muodostaa yhdistämällä muita tyyppejä.
 
 ## Laskentamallit
-Laiska vs ahkera
 
 ## Samanaikaisuus
 
 
 ## Haskell
-Haskell on puhdas funktionaalinen ohjelmointikieli, joka käyttää laiskaa laskentaa.
+Haskell on puhdas funktionaalinen ohjelmointikieli, joka käyttää laiskaa laskentaa. Se käyttää vahvaa staattista tyyppisysteemiä, jossa voidaan määritellä uusia algebraalisia datatyyppijä. Se määriteltiin alun perin tutkimuskäyttöön, mutta on nykyään käytössä monissa yrityksissä. 
 
-Haskelissa voidaan muodostaa uusia algebraalisia datatyyppejä.
+Haskelissa voidaan määritellä tyyppiluokkia (typeclass), joiden avulla voidaan tietyille funktioille määritellä määritellä eri toteutus eri tyypeille. Tyyppiluokilla voidaan määritellä yleisiä ominaisuuksia, erimerkiksi yhtäsuuruuden tarkastamiselle (Eq) tai numeerisuudelle (Num) on olemassa tyyppiluokat. Yhtäsuuruus voidaan määritellä kaikille uusille tyypeille tekemällä tyypistä instanssi luokkaan Eq ja implementoimalla tyypille tarvittavat funktiot (== ja /=). Tyyppijärjestelmässä voidaan myös vaatia, että tyyppillä on instanssi tyyppiluokassa. Seuraavassa tyyppimäärittelyssä vaaditaan, että funktion saamalla argumentilla on instanssi tyyppiluokassa Num.
+
+```Haskell
+esimerkkiFunktio :: (Num a) => a -> b
+```
 
 
 # Back end
@@ -145,7 +148,7 @@ Player pitää sisällään tiedon tiety pelaajan puolesta, pisteistä ja siitä
 
 GameState puolestaan pitää sisällään se hetkisen ja edellisen laudan tilan, molempien pelaajien tilan (myös kumpi pelaaja on vuorossa) ja tiedon siitä onko peli ohi. Edellistä laudan tilaa tarvitaan siirton oikeellisuuden tarkistuksessa.
 
-Myös siirroille on määritelty datatyyppi, josta selviää siirron tyyppi (Kiven asetus, vuoron ohitus tai ilmoitus pelin lopettamista), sekä uuden kiven paikka ((0,0) jos ei väliä).
+Myös siirroille on määritelty datatyyppi, josta selviää siirron tyyppi (Kiven asetus, vuoron ohitus tai ilmoitus pelin lopettamista), sekä uuden kiven paikka.
 
 ## Pelilogiikka
 Pelin logiikka koostuu kahdesta funktiosta, joilla on seuraavat tyypit.
