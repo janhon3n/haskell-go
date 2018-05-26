@@ -1,14 +1,14 @@
 name:                haskell-go
 version:             0.1.0.0
-github:              "githubuser/haskell-go"
+github:              "github.com/janhon3n"
 license:             BSD3
-author:              "Author name here"
+author:              "Mikael Janhonen"
 maintainer:          "example@example.com"
-copyright:           "2018 Author name here"
+copyright:           "2018 Mikael Janhonen"
 
 extra-source-files:
 - README.md
-- ChangeLog.md
+- REPORT.md
 
 # Metadata used when publishing your package
 # synopsis:            Short description of your package

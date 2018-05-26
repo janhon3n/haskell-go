@@ -4,16 +4,21 @@ haskell-go is the Go board game created in haskell. It uses the Happstack HTTP s
 
 There is also a web interface created with the React framework that the Happstack server serves.
 
-## Go structure
+# How to install
+A build executable is included in the root folder, named "haskell-go.exe". You can launch the program simply by executing it.
 
-The following files are responsible for the game functionality.
+To build, make sure you have Stack installed (> 1.7.1) and run
+```
+stack build
+```
 
-File | Responsibility
------|----------------------------------------------------
-Board.hs | Declare data types for Side and PlaceData and types for Place, Board etc. Add functions for manipulating the board state.
-Region.hs | Declare type for Region as a list of Places. Add functions for finding uniform regions from a board and manipulating regions. Used for analysing the board for allowed moves, capturing stones and score calculation.
+To launch the server after being build run
+```
+stack exec haskell-go-exe
+```
 
-
-
-
-## Happstack config
+The react client is already build in /react-client/build/. To build again you need to first install the dependencies and then run the build command. Make sure first that you are in the /react-client folder.
+```
+npm install
+npm run build
+```

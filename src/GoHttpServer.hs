@@ -42,17 +42,20 @@ instance FromJSON JSONNewGame
 instance ToJSON JSONNewGame
 
 conf :: Conf
-conf = Conf { port = 3008
-      , validator = Nothing
-      , logAccess = Just logMAccess
-      , timeout = 60
+conf = Conf {
+      port = 8000,
+      validator = Nothing,
+      logAccess = Just logMAccess,
+      timeout = 60
       }
 
 bodyPolicy :: BodyPolicy
 bodyPolicy = (defaultBodyPolicy "/tmp/" 0 1000 1000)
 
 startServer :: IO ()
-startServer = simpleHTTP nullConf $ handlers
+startServer = do
+      Prelude.putStrLn "Running server on port 8000"
+      simpleHTTP nullConf $ handlers
 
 handlers :: ServerPart Response
 handlers = do
