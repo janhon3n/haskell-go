@@ -7,6 +7,20 @@ There is also a web interface created with the React framework that the Happstac
 ## How to install
 A built executable is included in the root folder, named "haskell-go.exe". You can launch the program simply by executing it.
 
+There is also a Dockerfile that creates an image that runs a container with the server on the containers port 8000.
+
+To create the docker image.
+```
+docker build -t haskell-go .
+```
+
+And to run the image with port binding to 8000.
+```
+docker run -it -p 8000:8000 haskell-go
+```
+
+
+
 To build, make sure you have Stack installed (> 1.7.1) and run
 ```
 stack build
