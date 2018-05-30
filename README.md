@@ -4,6 +4,8 @@ haskell-go is the Go board game created in haskell. It uses the Happstack HTTP s
 
 There is also a web interface created with the React framework that the Happstack server serves.
 
+The app is running on [http://go.janho.fi](http://go.janho.fi)
+
 ## How to install
 A built executable is included in the root folder, named "haskell-go.exe". You can launch the program simply by executing it.
 
