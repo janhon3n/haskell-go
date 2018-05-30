@@ -83,9 +83,11 @@ Funktionaaliset kielet ovat usein vahvasti tyypitettyjä. Tämä tarkoittaa ylee
 Usein voidaan määrittää omia algebraalisia datatyyppejä, joiden arvoalueet voidaan määrittää itse, ja uusia tyyppejä voidaan muodostaa yhdistämällä muita tyyppejä.
 
 ## Laskentamallit
+Funktionaaliset lausekkeet voidaan laskea auki laiskalla tai innokkaalla laskennalla.
 
-## Samanaikaisuus
+Laiskassa laskennassa kaikki argumentit lasketaan vain silloin kuin siitä tarvitaan. Tämän lähestymistavan edut ovat kyky laskea funktion arvo, vaikka sen argumenttien arvoa ei ole mahdollista määrittää, jos sitä ei käytetä. Tuottavuutta lisätään välttämällä tarpeettomia laskutoimituksia ja kykyä luoda ääretön tietorakenne. Laiska arvostuksen haittapuoli on, että argumenteiden arvon määrittämisessä ei ehkä ole (ehkä odotettavissa) sivuvaikutuksia.
 
+Innokkaassa laskennassa funktion argumenttien arvot lasketaan auki ennen kuin ne syötetään funktioon. Tämän lähestymistavan etuna on kyky määrittää laskujärjestys. Haittana on tarve tehdä aikaa vieviä laskelmia jopa tilanteessa, jossa ne osoittautuvat tarpeettomiksi.
 
 ## Haskell
 Haskell on puhdas funktionaalinen ohjelmointikieli, joka käyttää laiskaa laskentaa. Se käyttää vahvaa staattista tyyppisysteemiä, jossa voidaan määritellä uusia algebraalisia datatyyppijä. Se määriteltiin alun perin tutkimuskäyttöön, mutta on nykyään käytössä monissa yrityksissä. 
